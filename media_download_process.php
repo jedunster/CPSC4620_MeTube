@@ -11,8 +11,8 @@ include_once "function.php";
 $username=$_SESSION['username'];
 $mediaid=$_REQUEST['id'];
 
-//insert into upload table
-$insertDownload="insert into download(downloadid,username,mediaid) values(NULL,'$username','$mediaid')";
+//insert into download table
+$insertDownload="insert into download(download_id,username,mediaid, download_date) values(NULL,'$username','$mediaid', NOW())";
 $queryresult = mysql_query($insertDownload)
 	
 ?>
