@@ -11,7 +11,7 @@ function user_exist_check ($username, $password){
 	else {
 		$row = mysql_fetch_assoc($result);
 		if($row == 0){
-			$query = "insert into account values ('$username','$password', NULL, NULL, NULL)";
+			$query = "insert into account (username, password) values ('$username','$password')";
 			echo "insert query:" . $query;
 			$insert = mysql_query( $query );
 			if($insert)
