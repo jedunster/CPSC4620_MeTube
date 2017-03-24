@@ -11,7 +11,8 @@ function user_exist_check ($username, $password){
 	else {
 		$row = mysql_fetch_assoc($result);
 		if($row == 0){
-			$query = "insert into account values ('$username','$password', NULL, NULL, NULL)";
+			$hash = password_hash($password, PASSWORD_DEFAULT);
+			$query = "insert into account values ('$username','$hash', NULL, NULL, NULL)";
 			echo "insert query:" . $query;
 			$insert = mysql_query( $query );
 			if($insert)
@@ -39,10 +40,10 @@ function user_pass_check($username, $password)
 	}
 	else{
 		$row = mysql_fetch_row($result);
-		if(strcmp($row[1],$password))
-			return 2; //wrong password
+		if(password_verify($password, $row[1]))
+			return 0; //Correct password
 		else 
-			return 0; //Checked.
+			return 2; //Wrong
 	}	
 }
 
