@@ -43,7 +43,7 @@ if(isset($_GET['id'])) {
 		echo "Viewing: ";
 		echo $result_row[0];
 		echo	"<br/>
-                        <video width="854" height="480" controls>
+                        <video width='".'854'."' height='".'480'."' controls>
                                 <source src='".$filepath."' type='".$type."'>
                         </video>";
 	}
