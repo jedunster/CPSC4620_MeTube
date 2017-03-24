@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <?php
+ini_set('session.save_path', getcwd(). '/tmp');
 session_start();
 
 include_once "function.php";

@@ -1,4 +1,5 @@
 <?php
+ini_set('session.save_path', getcwd(). '/tmp');
 session_start();
 include_once "function.php";
 
