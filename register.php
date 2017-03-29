@@ -12,7 +12,7 @@ if(isset($_POST['submit'])) {
 		$register_error = "Passwords don't match. Try again?";
 	}
 	else {
-		$check = user_exist_check($_POST['username'], $_POST['passowrd1']);	
+		$check = add_account_to_db($_POST['username'], $_POST['passowrd1']);	
 		if($check == 1){
 			//echo "Rigister succeeds";
 			$_SESSION['username']=$_POST['username'];
@@ -34,7 +34,7 @@ if(isset($_POST['submit'])) {
 
 <?php
   if(isset($register_error))
-   {  echo "<div id='passwd_result'> register_error:".$register_error."</div>";}
+   {  echo "<div id='passwd_result'> register_error: ".$register_error."</div>";}
 ?>
 
 </body>

@@ -1,29 +1,44 @@
 <?php
 include "mysqlClass.inc.php";
 
-function user_exist_check ($username, $password)
+// Check if the given username exists in the database.
+// Return codes:    0 - User does not exist
+//                  1 - User does exist
+//                  2 - Could not connect to server
+//                  3 - Could not execute query
+function user_exist_check($username)
 {
     if($query = mysqli_prepare(db_connect_id(), "SELECT username FROM account WHERE username=?"))
     {
         mysqli_stmt_bind_param($query, "s", $username);
-        $result = mysqli_stmt_execute($query);
+        if(!mysqli_stmt_execute($query)) return 2; //Query failed
         mysqli_stmt_bind_result($query, $fetchedUsername);
+        $exists = mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
+
+        if($exists)
+            return 1; //User exists
+        else
+            return 0; //User does not exist
     }
     else
     {
-		die ("user_exist_check() failed. Could not query the database: <br />". mysqli_error());
+        return 2; //Could not connect
     }
+}
 
-    if (!$result)
+function add_account_to_db($username, $password)
+{
+    $userExists = user_exist_check($username);
+
+    if ($userExists > 1)
     {
-        mysqli_stmt_close($query);
 		die ("user_exist_check() failed. Could not query the database: <br />". mysqli_error());
 	}	
     else
     {
-        if(!mysqli_stmt_fetch($query))
+        if($userExists == 0)
         {
-            mysqli_stmt_close($query);
 			$hash = password_hash($password, PASSWORD_DEFAULT);
 			
             if($query = mysqli_prepare(db_connect_id(), "INSERT INTO account (username, password) VALUES (?, ?)"))
@@ -44,7 +59,6 @@ function user_exist_check ($username, $password)
         }
         else
         {
-            mysqli_stmt_close($query);
 			return 2; //Username already exists
 		}
 	}
@@ -120,6 +134,104 @@ function upload_error($result)
 		return  "Upload file failed";
 	}
 }
+
+//Change the summary and email for an existing account given by username. Returns true
+//on a successful change, false on an unsuccessful change.
+function update_account_information($username, $summary, $email)
+{
+    if($query = mysqli_prepare(db_connect_id(), "UPDATE account SET summary=?, email=? WHERE username=?"))
+    {
+        mysqli_stmt_bind_param($query, "sss", $summary, $email, $username);
+        $result = mysqli_stmt_execute($query);
+        mysqli_stmt_close($query);
+        if (!$result || mysqli_affected_rows(db_connect_id()) < 1)
+	    {
+	        return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Adds a comment from the given username on the given media with the given
+//message. Returns true on success, false on failure.
+function add_comment($username, $mediaid, $message)
+{
+    if($query = mysqli_prepare(db_connect_id(), "INSERT INTO comment (comment_id,
+        username, media_id, comment_date, message) VALUES (NULL, ?, ?, NOW(), ?)"))
+    {
+        mysqli_stmt_bind_param($query, "sis", $username, $mediaid, $message);
+        $result = mysqli_stmt_execute($query);
+        mysqli_stmt_close($query);
+        if (!$result || mysqli_affected_rows(db_connect_id()) < 1)
+	    {
+	        return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Removes the comment with the given commentid. Returns true on success,
+//false on failure.
+function remove_comment($commentid)
+{
+    if($query = mysqli_prepare(db_connect_id(), "DELETE FROM comment WHERE comment_id=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $commentid);
+        $result = mysqli_stmt_execute($query);
+        mysqli_stmt_close($query);
+        if (!$result || mysqli_affected_rows(db_connect_id()) < 1)
+	    {
+	        return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Updates the comment with the given commentid to have the given message.
+//Returns true on success, false on failure.
+function update_comment($commentid, $message)
+{
+    if($query = mysqli_prepare(db_connect_id(), "UPDATE comment SET message=? WHERE comment_id=?"))
+    {
+        mysqli_stmt_bind_param($query, "si", $message, $commentid);
+        $result = mysqli_stmt_execute($query);
+        mysqli_stmt_close($query);
+        if (!$result || mysqli_affected_rows(db_connect_id()) < 1)
+	    {
+	        return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
 
 function other()
 {
