@@ -13,9 +13,12 @@ $username=$_SESSION['username'];
 $mediaid=$_REQUEST['id'];
 
 //insert into download table
-$insertDownload="insert into download(download_id,username,mediaid, download_date) values(NULL,'$username','$mediaid', NOW())";
-$queryresult = mysqli_query(db_connect_id(), $insertDownload)
-	
+if($query = mysqli_prepare(db_connect_id(), "INSERT INTO download(download_id, username, mediaid, download_date, download_ip) VALUES (NULL, ?, ?, NOW(), ?)"))
+{
+    mysqli_stmt_bind_param($query, "sis", $username, $mediaid, $_SERVER['REMOTE_ADDR']);
+    mysqli_stmt_execute($query);
+    mysqli_stmt_close($query);
+}
 ?>
 
 

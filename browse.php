@@ -15,11 +15,9 @@ function saveDownload(id)
 {
 	$.post("media_download_process.php",
 	{
-       id: id,
-	},
-	function(message) 
-    { }
- 	);
+       id: id
+    }
+    );
 } 
 </script>
 </head>
@@ -41,7 +39,7 @@ function saveDownload(id)
 	$query = "SELECT * from media"; 
 	$result = mysqli_query( db_connect_id(), $query );
 	if (!$result){
-	   die ("Could not query the media table in the database: <br />". mysqli_error( db_connect_ide() ));
+	   die ("Could not query the media table in the database: <br />". mysqli_error( db_connect_id() ));
 	}
 ?>
     
@@ -64,7 +62,7 @@ function saveDownload(id)
             	            <a href="media.php?id=<?php echo $mediaid;?>" target="_blank"><?php echo $filename;?></a> 
                         </td>
                         <td>
-            	            <a href="<?php echo $filenpath;?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[4];?>);">Download</a>
+            	            <a href="<?php echo $filenpath;?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[3];?>);">Download</a>
                         </td>
 		</tr>
         	<?php
