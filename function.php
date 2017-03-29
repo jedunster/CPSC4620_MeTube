@@ -3,7 +3,7 @@ include "mysqlClass.inc.php";
 
 function user_exist_check ($username, $password)
 {
-    if($query = mysqli_prepare(db_connect_id(), "select username from account where username=?"))
+    if($query = mysqli_prepare(db_connect_id(), "SELECT username FROM account WHERE username=?"))
     {
         mysqli_stmt_bind_param($query, "s", $username);
         $result = mysqli_stmt_execute($query);
@@ -26,7 +26,7 @@ function user_exist_check ($username, $password)
             mysqli_stmt_close($query);
 			$hash = password_hash($password, PASSWORD_DEFAULT);
 			
-            if($query = mysqli_prepare(db_connect_id(), "insert into account (username, password) values (?, ?)"))
+            if($query = mysqli_prepare(db_connect_id(), "INSERT INTO account (username, password) VALUES (?, ?)"))
             {
                 mysqli_stmt_bind_param($query, "ss", $username, $hash);
                 $insert = mysqli_stmt_execute($query);
@@ -53,7 +53,7 @@ function user_exist_check ($username, $password)
 
 function user_pass_check($username, $password)
 {
-    if($query = mysqli_prepare(db_connect_id(), "select password from account where username=?"))
+    if($query = mysqli_prepare(db_connect_id(), "SELECT password FROM account WHERE username=?"))
     {
         mysqli_stmt_bind_param($query, "s", $username);
         $result = mysqli_stmt_execute($query);
@@ -84,7 +84,7 @@ function user_pass_check($username, $password)
 //structure of the database.
 function updateMediaTime($mediaid)
 {
-    if($query = mysqli_prepare(db_connect_id(), "update media set lastaccesstime=NOW() WHERE mediaid=?"))
+    if($query = mysqli_prepare(db_connect_id(), "UPDATE media SET lastaccesstime=NOW() WHERE mediaid=?"))
     {
         mysqli_stmt_bind_param($query, "i", $mediaid);
         $result = mysqli_stmt_execute($query);
