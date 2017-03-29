@@ -14,7 +14,7 @@ $mediaid=$_REQUEST['id'];
 
 //insert into download table
 $insertDownload="insert into download(download_id,username,mediaid, download_date) values(NULL,'$username','$mediaid', NOW())";
-$queryresult = mysqli_query(db_connect_id(), $insertDownload)
+$queryresult = mysqli_query($insertDownload)
 	
 ?>
 

@@ -80,7 +80,7 @@ class mysql_db {
 	function sql_query($query = "") {
 		unset($this->query_result);
 		if($query != "") {
-			$this->query_result = @mysqli_query($this->db_connect_id, $query);
+			$this->query_result = @mysqli_query($query, $this->db_connect_id);
 		}
 		if($this->query_result) {
 			unset($this->row[$this->query_result]);
