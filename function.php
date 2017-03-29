@@ -33,7 +33,7 @@ function user_exist_check ($username, $password)
                 mysqli_stmt_close($query);
 
                 if($insert)
-                    return 1;
+                    return 1; //New user correctly inserted
                 else
 				    die ("Could not insert into the database: <br />". mysqli_error( db_connect_id() ));
             }
@@ -45,7 +45,7 @@ function user_exist_check ($username, $password)
         else
         {
             mysqli_stmt_close($query);
-			return 2;
+			return 2; //Username already exists
 		}
 	}
 }
@@ -53,34 +53,51 @@ function user_exist_check ($username, $password)
 
 function user_pass_check($username, $password)
 {
-	$query = "select * from account where username='$username'";
-	echo  $query;
-	$result = mysqli_query( db_connect_id(), $query );
-		
-	if (!$result)
-	{
-	   die ("user_pass_check() failed. Could not query the database: <br />". mysqli_error( db_connect_id() ));
+    if($query = mysqli_prepare(db_connect_id(), "select password from account where username=?"))
+    {
+        mysqli_stmt_bind_param($query, "s", $username);
+        $result = mysqli_stmt_execute($query);
+        mysqli_stmt_bind_result($query, $fetchedPassword);
+    }
+    else
+    {
+		die ("user_pass_check() failed. Could not query the database: <br />". mysqli_error());
+    }
+    
+    if (!$result or !mysqli_stmt_fetch($query))
+    {
+        mysqli_stmt_close($query);
+	    die ("user_pass_check() failed. Could not query the database: <br />". mysqli_error( db_connect_id() ));
 	}
-	else{
-		$row = mysqli_fetch_row($result);
-		if(password_verify($password, $row[1]))
+    else
+    {
+        mysqli_stmt_close($query);
+		if(password_verify($password, $fetchedPassword))
 			return 0; //Correct password
-		else 
+		else
 			return 2; //Wrong
-	}	
+	}
 }
 
+//Sets the last access time for the given media to now
+//This was provided by the TA. It is not consistent with the current
+//structure of the database.
 function updateMediaTime($mediaid)
 {
-	$query = "	update  media set lastaccesstime=NOW()
-   						WHERE '$mediaid' = mediaid
-					";
-					 // Run the query created above on the database through the connection
-    $result = mysqli_query( db_connect_id(), $query );
-	if (!$result)
-	{
-	   die ("updateMediaTime() failed. Could not query the database: <br />". mysqli_error( db_connect_id() ));
-	}
+    if($query = mysqli_prepare(db_connect_id(), "update media set lastaccesstime=NOW() WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $mediaid);
+        $result = mysqli_stmt_execute($query);
+        mysqli_stmt_close($query);
+        if (!$result)
+	    {
+	        die ("updateMediaTime() failed. Could not query the database: <br />". mysqli_error( db_connect_id() ));
+        }
+    }
+    else
+    {
+		die ("updateMediaTime() failed. Could not query the database: <br />". mysqli_error( db_connect_id() ));
+    }
 }
 
 function upload_error($result)
