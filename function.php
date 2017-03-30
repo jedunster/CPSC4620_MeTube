@@ -216,8 +216,8 @@ function update_account_info($username, $summary, $email)
 
 //Sets the metadata for the media item with the given mediaid to have the given title,
 //description, category, and keywords. The keywords should take the form of an array of
-//strings of keywords. Returns true on a successfull change, false on an unsuccessful
-//change.
+//strings containing a single keyword each. Returns true on a successfull change, false
+//on an unsuccessful change.
 function update_media_metadata($mediaid, $title, $description, $category, $keywords)
 {
     if($query = mysqli_prepare(db_connect_id(), "UPDATE media SET title=?, description=?, category=? WHERE mediaid=?"))
@@ -236,7 +236,7 @@ function update_media_metadata($mediaid, $title, $description, $category, $keywo
 		return false;
     }
 
-    if(!delete_media_keywords($mediaid))
+    if(!remove_media_keywords($mediaid))
         return false;
 
     $success = true;
@@ -278,7 +278,7 @@ function add_media_keyword($mediaid, $keyword)
 
 //Deletes all the keywords for the medai item with the given mediaid. Returns true
 //on success, false on failure.
-function delete_media_keywords($mediaid)
+function remove_media_keywords($mediaid)
 {
     if($query = mysqli_prepare(db_connect_id(), "DELETE FROM media_keyword WHERE mediaid=?"))
     {
@@ -482,6 +482,204 @@ function remove_favorited_media($username, $mediaid)
 		return false;
     }
 }
+
+//Creates a playlist with the given name under the user with the given
+//username. Returns true on success, false on failure.
+function create_playlist($username, $playlist_name)
+{
+    if($query = mysqli_prepare(db_connect_id(), "INSERT INTO playlist
+        (playlist_id, username, creation_date, name) VALUES (NULL, ?, NOW(), ?)"))
+    {
+        mysqli_stmt_bind_param($query, "ss", $username, $playlist_name);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $affected < 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Removes the playlist with the given playlist_id. Returns true
+//on success, false on failure.
+function remove_playlist($playlist_id)
+{
+    if($query = mysqli_prepare(db_connect_id(), "DELETE FROM playlist
+        WHERE playlist_id=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $playlist_id);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $affected < 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Adds the given keyword to the playlist with the given id. Returns true on
+//success, false on failure.
+function add_playlist_keyword($playlist_id, $keyword)
+{
+    if($query = mysqli_prepare(db_connect_id(), "INSERT INTO playlist_keyword 
+        (playlist_id, keyword) VALUES (?, ?)"))
+    {
+        mysqli_stmt_bind_param($query, "is", $playlist_id, $keyword);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        $errno = mysqli_errno(db_connect_id()); //Report success on error if it was just a duplicate entry warning
+        mysqli_stmt_close($query);
+        if ((!$result || $affected < 1) && ($errno != 1062))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+//Deletes all the keywords for the playlist with the given id. Returns true
+//on success, false on failure.
+function remove_playlist_keywords($playlist_id)
+{
+    if($query = mysqli_prepare(db_connect_id(), "DELETE FROM playlist_keyword
+        WHERE playlist_id=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $playlist_id);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $affected < 0)
+	    {
+	        return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Adds the media item with the given id to the playlist with the given id.
+//Returns true on success, false on failure.
+function add_playlist_media($playlist_id, $mediaid)
+{
+    if($query = mysqli_prepare(db_connect_id(), "INSERT INTO playlist_media 
+        (playlist_id, mediaid) VALUES (?, ?)"))
+    {
+        mysqli_stmt_bind_param($query, "ii", $playlist_id, $mediaid);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        $errno = mysqli_errno(db_connect_id()); //Report success on error if it was just a duplicate entry warning
+        mysqli_stmt_close($query);
+        if ((!$result || $affected < 1) && ($errno != 1062))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+//Removes the media item with the given id from the playlist with the given id.
+//Returns true on success, false on failure.
+function remove_playlist_media($playlist_id, $mediaid)
+{
+    if($query = mysqli_prepare(db_connect_id(), "DELETE FROM playlist_media 
+        WHERE playlist_id=? AND mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "ii", $playlist_id, $mediaid);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $affected < 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//Sets the metadata for the playlist with the given playlist_id to have the given name,
+//description, and keywords. The keywords should take the form of an array of strings
+//containing a single keyword each. Returns true on a successful change, false on an
+//unsuccessful change.
+function update_playlist_metadata($playlist_id, $name, $description, $keywords)
+{
+    if($query = mysqli_prepare(db_connect_id(), "UPDATE playlist SET name=?, description=?
+       WHERE playlist_id=?"))
+    {
+        mysqli_stmt_bind_param($query, "ssi", $name, $description, $playlist_id);
+        $result = mysqli_stmt_execute($query);
+        $matched = get_matched_rows(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $matched < 1)
+	    {
+	        return false;
+        }
+    }
+    else
+    {
+		return false;
+    }
+
+    if(!remove_playlist_keywords($playlist_id))
+        return false;
+
+    $success = true;
+    foreach($keywords as $currkeyword)
+    {
+        if(!add_playlist_keyword($playlist_id, $currkeyword))
+            $success = false;
+    }
+
+    return $success;
+}
+
+
 
 
 function other()
