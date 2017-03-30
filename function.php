@@ -377,6 +377,112 @@ function update_comment($commentid, $message)
     }
 }
 
+//Adds a subscription of the given subscriber to the given subscribee.
+//Returns true on success, false on failure.
+function add_subscription($subscriber_username, $subscribee_username)
+{
+    if($query = mysqli_prepare(db_connect_id(), "INSERT INTO subscription
+        (subscriber_username, subscribee_username) VALUES (?,?)"))
+    {
+        mysqli_stmt_bind_param($query, "ss", $subscriber_username, $subscribee_username);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        $errno = mysqli_errno(db_connect_id()); //Report success on error if it was just a duplicate entry warning
+        mysqli_stmt_close($query);
+        if ((!$result || $affected < 1) && ($errno != 1062))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Removes the subscription of the given sobscriber to the given subscribee.
+//Returns true on success, false on failure.
+function remove_subscription($subscriber_username, $subscribee_username)
+{
+    if($query = mysqli_prepare(db_connect_id(), "DELETE FROM subscription
+        WHERE subscriber_username=? AND subscribee_username=?"))
+    {
+        mysqli_stmt_bind_param($query, "ss", $subscriber_username, $subscribee_username);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $affected < 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Adds a favorite of the account with the given username of the media
+//with the given id. Returns true on success, false on failure.
+function add_favorited_media($username, $mediaid)
+{
+    if($query = mysqli_prepare(db_connect_id(), "INSERT INTO favorited_media
+        (username, mediaid) VALUES (?,?)"))
+    {
+        mysqli_stmt_bind_param($query, "si", $username, $mediaid);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        $errno = mysqli_errno(db_connect_id()); //Report success on error if it was just a duplicate entry warning
+        mysqli_stmt_close($query);
+        if ((!$result || $affected < 1) && ($errno != 1062))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Removes a favorite of the account with the given username of the media
+//with the given id. Returns true on success, false on failure.
+function remove_favorited_media($username, $mediaid)
+{
+    if($query = mysqli_prepare(db_connect_id(), "DELETE FROM favorited_media
+        WHERE username=? AND mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "si", $username, $mediaid);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $affected < 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
 
 function other()
 {
