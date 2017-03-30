@@ -253,6 +253,7 @@ function remove_media($mediaid)
 		return false;
     }
 
+    //Delete the media item from the filesystem
     if(!unlink($filepath))
         return false;
     return true;
@@ -724,8 +725,66 @@ function update_playlist_metadata($playlist_id, $name, $description, $keywords)
     return $success;
 }
 
+//Saves a message from the given sender to the given recipients with the given
+//message contents. The recipient usernames should take the form of an array of strings
+//containing a single username each. Returns true on a successful change, false on an
+//unsuccessful change.
+function add_message($sender_username, $message_contents, $recipient_usernames)
+{
+    if($query = mysqli_prepare(db_connect_id(), "INSERT INTO message (message_id,
+        sender_username, send_date, message_contents) VALUES (NULL, ?, NOW(), ?)"))
+    {
+        mysqli_stmt_bind_param($query, "ss", $sender_username, $message_contents);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        $insert_id = mysqli_insert_id(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $affected < 1)
+	    {
+	        return false;
+        }
+    }
+    else
+    {
+		return false;
+    }
 
+    $success = true;
+    foreach($recipient_usernames as $currusername)
+    {
+        if(!add_message_recipient($insert_id, $currusername))
+            $success = false;
+    }
 
+    return $success;
+}
+
+//Adds the user with the given username as a recipient of the message
+//with the given id. Returns true on success, false on failure.
+function add_message_recipient($message_id, $recipient_username)
+{
+    if($query = mysqli_prepare(db_connect_id(), "INSERT INTO message_recipient 
+        (message_id, recipient_username) VALUES (?, ?)"))
+    {
+        mysqli_stmt_bind_param($query, "is", $message_id, $recipient_username);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        $errno = mysqli_errno(db_connect_id()); //Report success on error if it was just a duplicate entry warning
+        mysqli_stmt_close($query);
+        if ((!$result || $affected < 1) && ($errno != 1062))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
 
 function other()
 {
