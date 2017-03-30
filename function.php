@@ -214,13 +214,58 @@ function update_account_info($username, $summary, $email)
     }
 }
 
+//Removes the media item with the given id from both the database and the filesystem.
+//Returns true on success, false on failure.
+function remove_media($mediaid)
+{
+    //Get the filepath to delete file later
+    if($query = mysqli_prepare(db_connect_id(), "SELECT path FROM media WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $mediaid);
+        $result = mysqli_stmt_execute($query);
+        mysqli_stmt_bind_result($query, $filepath);
+        $fetched = mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
+        if (!$result || !$fetched)
+	    {
+	        return false;
+        }
+    }
+    else
+    {
+		return false;
+    }
+    
+    //Delete the media item from the database
+    if($query = mysqli_prepare(db_connect_id(), "DELETE FROM media WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $mediaid);
+        $result = mysqli_stmt_execute($query);
+        $affected = mysqli_affected_rows(db_connect_id());
+        mysqli_stmt_close($query);
+        if (!$result || $affected < 1)
+	    {
+	        return false;
+        }
+    }
+    else
+    {
+		return false;
+    }
+
+    if(!unlink($filepath))
+        return false;
+    return true;
+}
+
 //Sets the metadata for the media item with the given mediaid to have the given title,
 //description, category, and keywords. The keywords should take the form of an array of
 //strings containing a single keyword each. Returns true on a successfull change, false
 //on an unsuccessful change.
 function update_media_metadata($mediaid, $title, $description, $category, $keywords)
 {
-    if($query = mysqli_prepare(db_connect_id(), "UPDATE media SET title=?, description=?, category=? WHERE mediaid=?"))
+    if($query = mysqli_prepare(db_connect_id(), "UPDATE media SET title=?, description=?,
+        category=? WHERE mediaid=?"))
     {
         mysqli_stmt_bind_param($query, "sssi", $title, $description, $category, $mediaid);
         $result = mysqli_stmt_execute($query);
