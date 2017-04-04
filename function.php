@@ -1,6 +1,15 @@
 <?php
 include "mysqlClass.inc.php";
 
+//Takes a set of keywords as a space-separated string and returns an
+//array of those keywords such that each element is a keyword and all
+//keywords are lowercase
+function array_from_keywords($keywords)
+{
+    $lower = strtolower($keywords);
+    return array_filter(preg_split("/\s+/", $lower), function($elem) {return $elem != "";});
+}
+
 //Gets the number of rows matched by the last MySQL
 //query sent to the database given by $link.
 function get_matched_rows($link)
