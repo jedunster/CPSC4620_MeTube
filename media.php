@@ -6,6 +6,7 @@
 ?>	
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Media</title>
 <script src="Scripts/AC_ActiveX.js" type="text/javascript"></script>

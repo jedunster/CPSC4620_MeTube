@@ -1,4 +1,7 @@
 <html>
+<head>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+</head>
 <body>
 <?php
 echo "<h1> Welcome to Metube! </h1>";
