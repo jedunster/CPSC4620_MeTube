@@ -15,6 +15,8 @@
 
 <body>
 <?php
+    include 'header.php';
+
 if(isset($_GET['id']))
 {
     if($query = mysqli_prepare(db_connect_id(), "SELECT title, type, path FROM media WHERE mediaid=?"))

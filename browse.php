@@ -10,6 +10,7 @@
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 <title>Media browse</title>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 <script type="text/javascript" src="js/jquery-latest.pack.js"></script>
 <script type="text/javascript">
 function saveDownload(id)
@@ -24,7 +25,11 @@ function saveDownload(id)
 </head>
 
 <body>
-<p>Welcome <?php echo $_SESSION['username'];?></p>
+
+<?php
+    include 'header.php';
+?>
+
 <a href='media_upload.php'  style="color:#FF9900;">Upload File</a>
 <div id='upload_result'>
 <?php 
