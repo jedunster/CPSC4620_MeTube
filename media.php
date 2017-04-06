@@ -100,6 +100,26 @@ if(isset($_GET['id']))
                 ?>
             </p>
         </div>
+        <br>
+        <h3 class='media-title'>Comments</h3>
+        <br>
+        <?php
+        if(isset($_SESSION['username']))
+        {
+            ?>
+            <div id="submitCommentContainer" class="submit-comment-container">
+                <form id="makeCommentForm" class="submit-comment-form">
+                    <h5>Write a comment:<h5>
+                    <textarea rows="2" maxlength="750" id="commentText" name="commentText" class="form-control comment-text">
+                    </textarea>
+                    <br>
+                    <input type="submit" id="commentSubmit" name="commentSubmit" class="btn btn-primary btn-right-align" value="Submit">
+                </form>
+            </div>
+            <?php
+        }
+        ?>
+
 <?php
     }
     else

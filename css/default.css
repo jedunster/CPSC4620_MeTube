@@ -56,3 +56,21 @@ h3.media-title{
 .media-description-value:first-letter{
     margin-left: -20px;
 }
+
+.submit-comment-container{
+    max-width: 854px;
+    border: 1px solid grey;
+}
+
+.submit-comment-form{
+    padding: 5px;
+}
+
+.btn-right-align{
+    margin: auto;
+    text-align: right;
+}
+
+.comment-text{
+    resize: none;
+}
