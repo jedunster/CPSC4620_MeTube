@@ -9,6 +9,8 @@
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Media</title>
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 <script src="Scripts/AC_ActiveX.js" type="text/javascript"></script>
 <script src="Scripts/AC_RunActiveContent.js" type="text/javascript"></script>
 </head>
@@ -19,46 +21,96 @@
 
 if(isset($_GET['id']))
 {
-    if($query = mysqli_prepare(db_connect_id(), "SELECT title, type, path FROM media WHERE mediaid=?"))
+    echo "<div id='bodyContent' class='body-content'>";
+    //Get the media's information from the database
+    if($query = mysqli_prepare(db_connect_id(), "SELECT username, title, type, path, upload_date, description, category FROM media WHERE mediaid=?"))
     {
         mysqli_stmt_bind_param($query, "i", $_GET['id']);
         $result = mysqli_stmt_execute($query);
-        mysqli_stmt_bind_result($query, $title, $type, $filepath);
-        $result = $result and mysqli_stmt_fetch($query);
+        mysqli_stmt_bind_result($query, $username, $title, $type, $filepath, $date, $description, $category);
+        $result = $result && mysqli_stmt_fetch($query);
         mysqli_stmt_close($query);
-        
-        if (!$result)
-	    {
-	        die ("Media lookup failed in media.php. Could not query the database: <br />". mysqli_error( db_connect_id() ));
-        }
     }
-    
-    //updateMediaTime($_GET['id']);
-	
-	if(substr($type,0,5)=="image") //view image
-	{
-		echo "Viewing Picture:";
-		echo $title;
-		echo "<img src='".$filepath."'/>";
-	}
-	else if(substr($type,0,5)=="audio")
-	{
-		echo "Listening to: ";
-		echo $title;
-		echo 	"<br/>
-			<audio controls>
-				<source src='".$filepath."' type='".$type."'>
-			</audio>";
-	}
-	else if(substr($type,0,5)=="video")
-	{	
-		echo "Viewing: ";
-		echo $title;
-		echo	"<br/>
-                        <video width='".'854'."' height='".'480'."' controls>
-                                <source src='".$filepath."' type='".$type."'>
-                        </video>";
-	}
+    else
+    {
+        $result = false;
+    }
+
+    $keywords = get_media_keywords($_GET['id']);
+
+    //If the media was found, display it for the user, otherwise show a warning.
+    if($result)
+    {
+        echo "<h3 class='media-title'>$title</h3><br>";
+        echo "<div id='mediaContainer' class='media-container'>";
+
+        if(substr($type,0,5)=="image") //view image
+        {
+            echo "<img class='media-item' src='".$filepath."'/>";
+        }
+        else if(substr($type,0,5)=="audio")
+        {
+            echo 	"<audio controls>
+                        <source class='media-item' src='".$filepath."' type='".$type."'>
+                    </audio>";
+        }
+        else if(substr($type,0,5)=="video")
+        {	
+            echo	"<video class='media-item' width='".'854'."' height='".'480'."' controls>
+                        <source src='".$filepath."' type='".$type."'>
+                    </video>";
+        }
+?>
+        </div>
+        <div id='mediaDetailsContainer' class='media-details-container'>
+            <p class='media-description-value'>
+                <strong>Uploaded By:</strong>
+                <a href="account.php?username=<?php echo urlencode($username); ?>">
+                    <?php echo $username; ?>
+                </a>
+            </p>
+            <p class='media-description-value'>
+                <strong>Upload Time:</strong> <?php echo $date; ?>
+            </p>
+            <p class='media-description-value'>
+                <strong>Description:</strong>
+                <?php
+                    if($description != NULL)
+                        echo $description;
+                    else
+                        echo "No description.";
+                ?>
+            </p>
+            <p class='media-description-value'>
+                <strong>Category:</strong>
+                <?php
+                    if($category != NULL)
+                        echo $category;
+                    else
+                        echo "No category.";
+                ?>
+            </p>
+            <p class='media-description-value'>
+                <strong>Keywords:</strong>
+                <?php
+                    if($keywords != NULL)
+                        echo $keywords;
+                    else
+                        echo "No keywords.";
+                ?>
+            </p>
+        </div>
+<?php
+    }
+    else
+    {
+?>
+        <div class="alert alert-danger" style="text-align: center">
+            <strong>Error:</strong> The selected media item could not be found.
+        </div>
+<?php
+    }
+    echo "</div>";
 }
 else
 {

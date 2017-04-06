@@ -32,7 +32,7 @@
         <div id="logInContainer" class="col-md-1" style="padding-top: 7px">
             <a href="<?php
                 if(isset($_SESSION['username']))
-                    echo 'account.php?username='.$_SESSION['username'];
+                    echo 'account.php?username='.urlencode($_SESSION['username']);
                 else
                     echo 'login.php'; ?>">
                 <div id="logInButton" class="btn btn-primary">
@@ -43,4 +43,3 @@
     </div>
     <hr style="margin: 10px 0px 20px 0px"/>
 </div>
-

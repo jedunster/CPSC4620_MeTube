@@ -331,7 +331,7 @@ function add_media_keyword($mediaid, $keyword)
 }
 
 
-//Deletes all the keywords for the medai item with the given mediaid. Returns true
+//Deletes all the keywords for the media item with the given mediaid. Returns true
 //on success, false on failure.
 function remove_media_keywords($mediaid)
 {
@@ -353,6 +353,36 @@ function remove_media_keywords($mediaid)
     else
     {
 		return false;
+    }
+}
+
+//Gets all the keywords for the media item with the given mediaid. Returns the keywords
+//as a space-separated string of keywords, or null on failure.
+function get_media_keywords($mediaid)
+{
+    if($query = mysqli_prepare(db_connect_id(), "SELECT keyword FROM media_keyword WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $mediaid);
+        $result = mysqli_stmt_execute($query);
+        if (!$result)
+        {
+            mysqli_stmt_close($query);
+	        return NULL;
+        }
+        
+        mysqli_stmt_bind_result($query, $keyword);
+
+        $keywordstring = "";
+        while(mysqli_stmt_fetch($query))
+            $keywordstring = $keywordstring.$keyword." ";
+
+        mysqli_stmt_close($query);
+
+        return $keywordstring;
+    }
+    else
+    {
+		return NULL;
     }
 }
 
@@ -641,6 +671,36 @@ function remove_playlist_keywords($playlist_id)
     else
     {
 		return false;
+    }
+}
+
+//Gets all the keywords for the playlist with the given playlist_id. Returns the keywords
+//as a space-separated string of keywords, or null on failure.
+function get_playlist_keywords($playlist_id)
+{
+    if($query = mysqli_prepare(db_connect_id(), "SELECT keyword FROM playlist_keyword WHERE playlist_id=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $playlist_id);
+        $result = mysqli_stmt_execute($query);
+        if (!$result)
+        {
+            mysqli_stmt_close($query);
+	        return NULL;
+        }
+        
+        mysqli_stmt_bind_result($query, $keyword);
+
+        $keywordstring = "";
+        while(mysqli_stmt_fetch($query))
+            $keywordstring = $keywordstring.$keyword." ";
+
+        mysqli_stmt_close($query);
+
+        return $keywordstring;
+    }
+    else
+    {
+		return NULL;
     }
 }
 

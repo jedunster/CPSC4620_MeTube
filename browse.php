@@ -29,7 +29,7 @@ function saveDownload(id)
 <?php
     include 'header.php';
 ?>
-
+<div id='bodyContent' class='body-content'>
 <a href='media_upload.php'  style="color:#FF9900;">Upload File</a>
 <div id='upload_result'>
 <?php 
@@ -76,5 +76,6 @@ function saveDownload(id)
 		?>
 	</table>
    </div>
+</div>
 </body>
 </html>
