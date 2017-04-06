@@ -22,9 +22,47 @@
 
 if(isset($_GET['username']))
 {
-    echo "<div id='bodyContent' class='body-content'>";
-     
-    echo "</div>";
+    if(!user_exist_check($_GET['username']))
+    {
+        ?>
+        <div class="alert alert-danger" style="text-align: center">
+           <strong>Oops! That account doesn't exist. Why not try again?</strong>
+        </div>
+        <?php
+    }
+    else
+    {
+        echo "<div id='bodyContent' class='body-content'>";
+        echo "Account page for: ".$_GET['username'];
+        
+        ?>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    Side pane
+                </div>
+                <div class="col-sm-8">
+                    <div class="row-sm-4">
+                        Right side row 1
+                    </div>
+                    <div class="row-sm-4">
+                        Right side row 2
+                    </div>
+                    <div class="row-sm-4">
+                        Right side row 3
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+
+        echo "</div>";
+    }
+}
+elseif(isset($_SESSION['username']))
+{
+
+    echo "<meta http-equiv=\"refresh\" content=\"0;url=account.php?username=".$_SESSION['username']."\">";
 }
 else
 {
