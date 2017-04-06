@@ -11,6 +11,7 @@
 <title>Media</title>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<script src="js/bootstrap.min.js"></script>
 <script src="Scripts/AC_ActiveX.js" type="text/javascript"></script>
 <script src="Scripts/AC_RunActiveContent.js" type="text/javascript"></script>
 </head>
@@ -116,9 +117,14 @@ if(isset($_GET['id']))
                     <input type="submit" id="commentSubmit" name="commentSubmit" class="btn btn-primary btn-right-align" value="Submit">
                 </form>
             </div>
+            <br>
             <?php
         }
-        ?>
+        
+        echo "<div id='commentSection'>";
+        include "comments.php"; 
+        echo "</div>";
+?>
 
 <?php
     }

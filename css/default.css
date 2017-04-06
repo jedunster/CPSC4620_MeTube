@@ -74,3 +74,24 @@ h3.media-title{
 .comment-text{
     resize: none;
 }
+
+.comment-message{
+    padding: 0px 5px 0px 5px;
+    word-wrap: break-word;
+}
+
+.current-comments-container{
+    width: 854px;
+    border: 1px solid grey;
+}
+
+.existing-comment-container{
+    width: 95%;
+    margin: auto;
+    border: 1px solid grey;
+}
+
+.btn-edit-comment{
+    margin: 5px;
+    float:right;
+}

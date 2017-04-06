@@ -41,5 +41,5 @@
             </a>
         </div>
     </div>
-    <hr style="margin: 10px 0px 20px 0px"/>
+    <hr style="margin: 10px 0px 20px 0px;"/>
 </div>
