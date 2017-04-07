@@ -2,15 +2,25 @@
 ini_set('session.save_path', getcwd(). '/tmp');
 session_start();
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-<title>Media Upload</title>
+<title>Upload</title>
 </head>
 
 <body>
+<?php
+	include "header.php";
+if(!isset($_SESSION['username']))
+{?>
+<meta http-equiv="refresh" content="0;url=browse.php">
+<?php    
+}
+else
+{
+?>
 
 <form method="post" action="media_upload_process.php" enctype="multipart/form-data" >
  
@@ -27,3 +37,4 @@ session_start();
 
 </body>
 </html>
+<?php }?>
