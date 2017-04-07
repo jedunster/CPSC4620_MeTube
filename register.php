@@ -1,8 +1,4 @@
-<html>
-<head>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-</head>
-<body>
+
 
 <?php
 ini_set('session.save_path', getcwd(). '/tmp');
@@ -26,8 +22,12 @@ if(isset($_POST['submit'])) {
 		}
 	}
 }
-
 ?>
+<html>
+<head>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+</head>
+<body>
 <form action="register.php" method="post">
 	Username: <input type="text" name="username"> <br>
 	Create Password: <input  type="password" name="passowrd1"> <br>

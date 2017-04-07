@@ -1,9 +1,9 @@
-<!DOCTYPE html>
 <?php
 	ini_set('session.save_path', getcwd(). '/tmp');
 	session_start();
 	include_once "function.php";
 ?>	
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>

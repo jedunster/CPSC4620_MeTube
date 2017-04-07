@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="css/default.css" />
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 <?php
 ini_set('session.save_path', getcwd(). '/tmp');
 session_start();
@@ -28,7 +26,10 @@ if(isset($_POST['submit'])) {
 
  
 ?>
-	<form method="post" action="<?php echo "login.php"; ?>">
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+    
+    <form method="post" action="<?php echo "login.php"; ?>">
 
 	<table width="100%">
 		<tr>
