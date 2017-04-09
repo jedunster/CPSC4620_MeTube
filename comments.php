@@ -1,3 +1,8 @@
+<?php
+	ini_set('session.save_path', getcwd(). '/tmp');
+	session_start();
+	include_once "function.php";
+?>	
 <head>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
@@ -24,18 +29,17 @@ if($result && mysqli_stmt_fetch($query))
     {
         ?>
         <div class='existing-comment-container'>
+            <input type="hidden" name="commentidField" value="<?php echo $comment_id; ?>">
             <?php if(isset($_SESSION['username']) && $commenter === $_SESSION['username'])
             {
-                echo "<span id='deleteCommentButton' class='glyphicon glyphicon-remove btn-edit-comment'></span>";
-                echo "<span id='editCommentButton' class='glyphicon glyphicon-pencil btn-edit-comment'></span>";
+                echo "<span title='Delete Comment' class='glyphicon glyphicon-remove btn-delete-comment'></span>";
+                echo "<span title='Edit Comment' class='glyphicon glyphicon-pencil btn-edit-comment'></span>";
             }
             ?>
 
             <p style='padding: 4px 5px 0px 5px'>
-                <a href="account.php?username=<?php echo urlencode($commenter); ?>">
-                    <?php echo $commenter; ?>
-                </a>
-                at <?php echo $comment_date; ?>:
+                <a href="account.php?username=<?php echo urlencode($commenter); ?>"><?php
+                echo $commenter; ?></a> at <?php echo $comment_date; ?>:
             </p>
 
             

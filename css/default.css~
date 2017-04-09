@@ -23,7 +23,7 @@
     width: 854px;
     min-height: 480px;
     border: 1px solid grey;
-    background-color: black;
+    background-color: darkgrey;
     display: flex;
     align-items: center; 
     justify-content: center;

@@ -8,7 +8,7 @@
     && isset($_SESSION['username']))
     {
         if(add_comment($_SESSION['username'], $_REQUEST['mediaidField'], $_REQUEST['commentText']))
-            echo "succeed";
+            echo "success";
         else
             echo "Failed to submit comment.";
     }

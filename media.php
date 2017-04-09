@@ -117,6 +117,7 @@ if(isset($_GET['id']))
                     <br>
                     <input type="hidden" id="mediaidField" name="mediaidField" value="<?php echo $_GET['id']; ?>">
                     <input type="submit" id="commentSubmit" name="commentSubmit" class="btn btn-primary btn-right-align" value="Submit">
+                    <p id="makeCommentValidation" class="comment-validation"></p>
                 </form>
             </div>
             <br>
@@ -124,7 +125,7 @@ if(isset($_GET['id']))
         }
         
         ?>
-        <input type="hidden" id="mediaidField" name="mediaidField" value="<?php echo $_GET['id']; ?>">
+        <input type="hidden" id="mediaidJS" name="mediaidJS" value="<?php echo $_GET['id']; ?>">
         <?php
         echo "<div id='commentSection'>";
         include "comments.php"; 
