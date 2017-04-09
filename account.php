@@ -25,31 +25,155 @@ if(isset($_GET['username']))
     if(!user_exist_check($_GET['username']))
     {
         ?>
-        <div class="alert alert-danger" style="text-align: center">
+        <div class="alert alert-danger" style="text-align: center; margin-bottom: 5px">
            <strong>Oops! That account doesn't exist. Why not try again?</strong>
         </div>
         <?php
     }
     else
     {
-        echo "<div id='bodyContent' class='body-content'>";
-        echo "Account page for: ".$_GET['username'];
+		echo "<div style=\"margin-left: 15px\">";
         
         ?>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    Side pane
-                </div>
-                <div class="col-sm-8">
-                    <div class="row-sm-4">
-                        Right side row 1
+        <div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-3" style="height: 861px; overflow-y: auto">
+					<?php
+					echo "<h3 class=\"media-title\">";
+					echo $_GET['username']."'s Profile &nbsp;";
+					
+					$issubbed = 0;
+					if($query = mysqli_prepare(db_connect_id(), "SELECT * FROM subscription WHERE subscriber_username=? AND subscribee_username=?"))
+					{
+						mysqli_stmt_bind_param($query, "ss", $_SESSION['username'], $_GET['username']);
+						$result = mysqli_stmt_execute($query);
+						$result = mysqli_stmt_fetch($query);
+						mysqli_stmt_close($query);
+					}
+					if($result)
+						$issubbed = 1;
+
+
+					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" value=".$issubbed.">";
+					if(isset($_SESSION['username']))
+					{
+						if($_GET['username'] == $_SESSION['username'])
+						{
+							echo "Edit profile";
+						}
+						else
+						{
+							if(!$issubbed)
+								echo "Subscribe";
+							else
+								echo "Unsubscribe";
+						}
+					}
+					else
+					{
+						echo "Login to subscribe";
+					}
+
+					echo "</button></h3><br/><br/>";
+					?>
+					<h4>
+						About me:
+					</h4>
+					<div style="font-size: 15px">
+						<?php
+						$email = "";
+						$bio = "";
+						if($query = mysqli_prepare(db_connect_id(), "SELECT email, summary FROM account WHERE username=?"))
+						{
+							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							$result = mysqli_stmt_execute($query);
+							mysqli_stmt_bind_result($query, $email, $bio);
+							$result = $result && mysqli_stmt_fetch($query);
+							mysqli_stmt_close($query);
+						}
+						echo "Email: ";
+						echo $email;
+						echo "<br/>";
+						echo "Bio:";
+						echo "<br/>";
+						echo "<div class=\"account-details-container\">";
+						echo "<p style=\"margin: 10px 10px 10px 10px\">";
+						if(strlen($bio) > 0)
+							echo $bio;
+						else
+							echo "No bio given";
+						echo "</p>";
+						echo "</div><br/><br/>";
+
+						if(isset($_SESSION['username']) && $_SESSION['username'] != $_GET['username'])
+						{
+							echo "Send " . $_GET['username'] . " a message:<br/>";
+							?>
+							<textarea rows="4" maxlength="750" class="form-control commment-text" style="resize: none">Type your message here.</textarea>
+							<br/>
+							<button type="button" class="btn btn-primary" id="messagesend">Send</button>
+							<br/>
+							<?php
+						}
+						
+						echo "<br/><br/><h4>My subscriptions:</h4><br/>";
+						$subbeduser = "";
+						if($query = mysqli_prepare(db_connect_id(), "SELECT subscribee_username FROM subscription WHERE subscriber_username=?"))
+						{
+							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							$result = mysqli_stmt_execute($query);
+							mysqli_stmt_bind_result($query, $subbeduser);
+							while(mysqli_stmt_fetch($query))
+							{
+								echo "<a href=\"account.php?username=".$subbeduser."\">".$subbeduser."</a><br/>";
+							}
+							mysqli_stmt_close($query);
+						}
+						?>
+					</div>
+				</div>
+                <div class="col-sm-9">
+                    <div class="row" style="height: 287px; overflow-y: auto">
+						<h4>Uploads
+						<?php
+						if($_SESSION['username'] == $_GET['username'])
+							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"newupload\">New upload</button></h4>";
+						else
+							echo "</h4>";
+						?>
                     </div>
-                    <div class="row-sm-4">
-                        Right side row 2
+                    <div class="row" style="height: 287px; overflow-y: auto">
+						<h4>Playlists
+						<?php
+						if($_SESSION['username'] == $_GET['username'])
+							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"newplaylist\">New playlist</button></h4>";
+						else
+							echo "</h4>";
+
+						if($query = mysqli_prepare(db_connect_id(), "SELECT playlist_id, name FROM playlist WHERE username=?"))
+						{
+							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							$result = mysqli_stmt_execute($query);
+							mysqli_stmt_bind_result($query, $listid, $listname);
+							while(mysqli_stmt_fetch($query))
+							{
+								echo "<a href=\"playlist.php?id=".$listid."\">".$listname."</a><br/>";
+								echo "The media list will be here<br/><br/>";
+							}
+							mysqli_stmt_close($query);
+						}
+
+						?>
                     </div>
-                    <div class="row-sm-4">
-                        Right side row 3
+                    <div class="row" style="height: 287px; overflow-y: auto">
+						<h4>Favorites
+						<?php
+						if($_SESSION['username'] == $_GET['username'])
+							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"editfavorites\">Edit</button></h4>";
+						else
+							echo "</h4>";
+						?>
+
                     </div>
                 </div>
             </div>
