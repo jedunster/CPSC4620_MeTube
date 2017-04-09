@@ -37,7 +37,7 @@ if(isset($_GET['username']))
         ?>
         <div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-3" style="height: 861px; overflow-y: auto">
+				<div class="col-sm-3" style="height: 90.7vh; overflow-y: auto">
 					<?php
 					echo "<h3 class=\"media-title\">";
 					echo $_GET['username']."'s Profile &nbsp;";
@@ -133,7 +133,7 @@ if(isset($_GET['username']))
 					</div>
 				</div>
                 <div class="col-sm-9">
-                    <div class="row" style="height: 287px; overflow-y: auto">
+                    <div class="row" style="height: 30.2vh; overflow-y: auto">
 						<h4>Uploads
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
@@ -142,7 +142,7 @@ if(isset($_GET['username']))
 							echo "</h4>";
 						?>
                     </div>
-                    <div class="row" style="height: 287px; overflow-y: auto">
+                    <div class="row" style="height: 30.2vh; overflow-y: auto">
 						<h4>Playlists
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
@@ -164,8 +164,9 @@ if(isset($_GET['username']))
 						}
 
 						?>
+
                     </div>
-                    <div class="row" style="height: 287px; overflow-y: auto">
+                    <div class="row" style="height: 30.3vh; overflow-y: auto">
 						<h4>Favorites
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
