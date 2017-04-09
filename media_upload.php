@@ -6,7 +6,10 @@ session_start();
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<script src="js/jquery-3.2.0.min.js"></script>
+    	<script src="js/bootstrap.min.js"></script>
 <title>Upload</title>
 </head>
 
@@ -21,20 +24,47 @@ if(!isset($_SESSION['username']))
 else
 {
 ?>
+<div style="margin-left: 15px;">
 
-<form method="post" action="media_upload_process.php" enctype="multipart/form-data" >
- 
-    <p style="margin:0; padding:0">
-        <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-        Add a Media: <label style="color:#663399"><em> (Each file limit 10M)</em></label><br/>
-        <input  name="file" type="file" size="50" />
-  
-        <input value="Upload" name="submit" type="submit" />
-    </p>
- 
+<!--TODO: REDO BACKEND FOR FORM -->
+	<form class="form-horizontal" method="post" action="media_upload_process.php" enctype="multipart/form-data" >
+		
+   		
+        	<input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+        	<h3>Upload a File:</h3>
+		
+	<label class="btn btn-primary btn-file">
+    			Browse <input type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
+		</label>
+		<span class="label label-info" id="upload-file-info">Choose a file </span>
+		<h4 style="margin-bottom:0px; margin-top: 20px;">Title</h4>
+		<input type="text" class="form-control" style="width: 300px;">
+
+		<h4 style="margin-bottom:0px; margin-top: 20px;">Description</h4>
+  		<textarea name="description" class="form-control" rows="5" style="width: 300px;"></textarea>
+
+		<h4 style="margin-bottom:0px; margin-top: 20px;">Category</h4>
+		<select class="form-control" style="width: 175px;">
+			<option>Funny</option>
+			<option>Music</option> 
+			<option>Sports</option> 
+			<option>Informative</option> 
+			<option>Other</option> 
+		</select>			
+
+        	
+		<h4 style="margin-bottom:0px; margin-top: 20px;">Keywords (Space Separated)</h4>
+                <input type="text" class="form-control" style="width: 300px;">
+
+
+		<input style="margin-top: 20px;" value="Upload" name="submit" type="submit" class="btn btn-primary"/>
+    		
+ 		
                 
-</form>
+	</form>
 
+<h5 style="margin-top: 20px">Supports File Formats supported by HTML5</h5>
+</div>
 </body>
 </html>
 <?php }?>
