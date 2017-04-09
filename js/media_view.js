@@ -15,11 +15,11 @@ $(document).ready(function() {
         {
             $('.btn-delete-comment').click(function() {
                 var commentid = $(this).parent().find('[name="commentidField"]').val();
-                
+
                 request = $.ajax({
-                    url: "commentDelete.php",
+                    url: "mediaViewAjax.php",
                     type: "POST",
-                    data: {'commentid': commentid}
+                    data: {'action': 1, 'commentid': commentid}
                 });
 
                 //If delete succeeds, refresh comments
@@ -59,11 +59,11 @@ $(document).ready(function() {
                 }
                 
                 var form = $(this);
-
+                var serializedForm = form.serialize() + "&action=3";
                 request = $.ajax({
-                    url: "commentEdit.php",
+                    url: "mediaViewAjax.php",
                     type: "POST",
-                    data: form.serialize()
+                    data: serializedForm
                 });
 
                 //If submit succeeds, refresh comments
@@ -104,9 +104,9 @@ $(document).ready(function() {
                 var element = $(this);
                 
                 request = $.ajax({
-                    url: "commentEditInterface.php",
+                    url: "mediaViewAjax.php",
                     type: "POST",
-                    data: {'commentid': commentid}
+                    data: {'action': 2, 'commentid': commentid}
                 });
 
                 //If edit interface request succeeds, refresh comments
@@ -167,9 +167,9 @@ $(document).ready(function() {
             }
 
             request = $.ajax({
-                url: "commentSubmit.php",
+                url: "mediaViewAjax.php",
                 type: "POST",
-                data: $('#makeCommentForm').serialize()
+                data: $('#makeCommentForm').serialize() + "&action=0"
             });
 
             //If submit succeeds, refresh comments
