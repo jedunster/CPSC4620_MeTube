@@ -135,7 +135,7 @@ if(isset($_GET['username']))
 					</div>
 				</div>
                 <div class="col-sm-9">
-                    <div class="row" style="height: 30.2vh; overflow-y: auto">
+                    <div class="row" style="height: 29vh; overflow-y: auto, margin-bottom: 10px">
 						<h4>Uploads
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
@@ -175,7 +175,7 @@ if(isset($_GET['username']))
 
 						?>
                     </div>
-                    <div class="row" style="height: 30.2vh; overflow-y: auto">
+                    <div class="row" style="height: 30.5vh; overflow-y: auto; margin-bottom: 10px; border-top: solid grey">
 						<h4>Playlists
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
@@ -195,8 +195,8 @@ if(isset($_GET['username']))
 							mysqli_stmt_bind_result($query, $listname, $listid);
 							while(mysqli_stmt_fetch($query))
 							{
-								echo "<div style=\"float: left\">";
-								echo "<a href=\"playlist.php?id=".$listid."\">".$listname."</a><br/>";
+								echo "<div style=\"float: left; margin-bottom: 10px\">";
+								echo "<a href=\"playlist.php?id=".$listid."\" style=\"font-size: 16px\">".$listname."</a><br/>";
 								if($query1 = mysqli_prepare(db_connect_id(), "SELECT title, username, media.mediaid, upload_date, category FROM playlist_media LEFT JOIN media ON playlist_media.mediaid = media.mediaid WHERE playlist_id = ? ORDER BY upload_date DESC"))	
 								{
 									mysqli_stmt_bind_param($query1, "i", $listid);
@@ -239,13 +239,45 @@ if(isset($_GET['username']))
 						?>
 
                     </div>
-                    <div class="row" style="height: 30.3vh; overflow-y: auto">
+                    <div class="row" style="height: 30.4vh; overflow-y: auto; border-top: solid grey">
 						<h4>Favorites
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
 							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"editfavorites\">Edit</button></h4>";
 						else
 							echo "</h4>";
+
+						if($query = mysqli_prepare(db_connect_id(), "SELECT title, media.username, type, media.mediaid, upload_date, category FROM media JOIN favorited_media ON media.mediaid = favorited_media.mediaid WHERE favorited_media.username=? ORDER BY upload_date DESC"))
+						{
+							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							$result = mysqli_stmt_execute($query);
+							mysqli_stmt_bind_result($query, $mediatitle, $mediauser, $mediatype, $mediaid, $mediadate, $mediacat);
+							while(mysqli_stmt_fetch($query))
+							{
+								echo "<div class=\"account-media-details-container\">";
+
+								switch(substr($mediatype,0,5))
+								{
+									case "video":
+										echo "<span class=\"glyphicon glyphicon-film\"></span> ";
+										break;
+									case "audio":
+										echo "<span class=\"glyphicon glyphicon-music\"></span> ";
+										break;
+									case "image":
+										echo "<span class=\"glyphicon glyphicon-picture\"></span> ";
+										break;
+									default: echo substr($mediatype,0,5);
+								}
+								echo "<a href=\"media.php?id=".$mediaid."\">".$mediatitle."</a><br/>";
+								echo "Uploaded: ".$mediadate."<br/>";
+								echo "By: ".$mediauser."<br/>";
+								echo "Category: ".$mediacat; if($mediacat == NULL) echo "None";
+								echo "</div>";
+							}
+							mysqli_stmt_close($query);
+						}
+
 						?>
 
                     </div>
