@@ -43,9 +43,7 @@ if($result && mysqli_stmt_fetch($query))
             </p>
 
             
-            <p class='comment-message'>
-                <?php echo $message; ?>
-            </p>
+            <p class='comment-message'><?php echo $message; ?></p>
         </div><br>
         <?php
     }while(mysqli_stmt_fetch($query));
