@@ -1,10 +1,12 @@
 /* You can implement your own css code*/
 
 #passwd_result{
-	background:#FF9900;
-	color:#FFFFFF;
-	font-weight:bold;
-	margin-right:60%;
+    color: red;
+    padding: 10px 0px 10px 0px;
+    font-size: 12px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
 }
 
 #upload_result{
@@ -27,6 +29,30 @@
     left: 0;
     width: 67%;
 	overflow-y: scroll;
+}
+
+#searchForm{
+    margin-bottom: 0px;
+}
+
+.login-title {
+    margin-top: 0px;
+}
+
+.login-form {
+    width: 50%;
+    margin: 0px auto;
+}
+
+.login-label {
+    text-align: left;
+    vertical-align: middle;
+    padding: 0px 0px 20px 0px;
+}
+
+.header-btn {
+    float: right;
+    margin-left: 5px
 }
 
 .body-content{

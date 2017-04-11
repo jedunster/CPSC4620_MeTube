@@ -28,28 +28,43 @@ if(isset($_POST['submit'])) {
 
  
 ?>
-    <link rel="stylesheet" type="text/css" href="css/default.css" />
+<head>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-    
-    <form method="post" action="<?php echo "login.php"; ?>">
-
-	<table width="100%">
-		<tr>
-			<td  width="20%">Username:</td>
-			<td width="80%"><input class="text"  type="text" name="username"><br /></td>
-		</tr>
-		<tr>
-			<td  width="20%">Password:</td>
-			<td width="80%"><input class="text"  type="password" name="password"><br /></td>
-		</tr>
-		<tr>
-        
-			<td><input name="submit" type="submit" value="Login"><input name="reset" type="reset" value="Reset"><br /></td>
-		</tr>
-	</table>
-	</form>
-
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script src="js/jquery-3.2.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
 <?php
-  if(isset($login_error))
-   {  echo "<div id='passwd_result'>".$login_error."</div>";}
+    include "header.php";
 ?>
+<div id='bodyContent' class='body-content' style='text-align: center'>
+    <h3 class='login-title'>Login to MeTube:</h3>
+    <form method="post" action="<?php echo "login.php"; ?>">
+	<table class='login-form' width="50%">
+		<tr>
+            <td width="20%" class="login-label">Username:</td>
+			<td width="80%"><input class="form-control" type="text" name="username"><br /></td>
+		</tr>
+		<tr>
+			<td  width="20%" class="login-label">Password:</td>
+			<td width="80%"><input class="form-control"  type="password" name="password"><br /></td>
+		</tr>
+        <tr>
+            <td></td>
+            <td style="position:relative"><input class="btn btn-primary" name="submit" type="submit" value="Login">
+            <input class="btn btn-primary" name="reset" type="reset" value="Reset">
+<?php
+        if(isset($login_error))
+            echo "<div id='passwd_result'>".$login_error."</div>";
+?>
+            </td>
+            <td></td>
+        </tr>
+	</table>
+    </form>
+</div>
+</body>

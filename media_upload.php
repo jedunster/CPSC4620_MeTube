@@ -11,8 +11,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/default.css">
 	<script src="js/jquery-3.2.0.min.js"></script>
-    	<script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 <title>Upload</title>
 </head>
 
