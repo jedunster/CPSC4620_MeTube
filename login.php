@@ -64,7 +64,8 @@ if(isset($_POST['submit'])) {
             </td>
             <td></td>
         </tr>
-	</table>
+    </table>
     </form>
+    <h6>Don't have an account? Register <a href="register.php">here</a>!</h6>
 </div>
 </body>
