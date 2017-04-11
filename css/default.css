@@ -194,6 +194,12 @@ h3.media-title{
 .btn-comment-edit-cancel{
 }
 
+.download-media-btn{
+    font-size:12px !important;
+    margin-top:5px;
+    float:right;
+}
+
 .playlist-dropdown-toggle{
     font-size:12px !important;
 }

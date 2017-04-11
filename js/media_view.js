@@ -360,6 +360,16 @@ $(document).ready(function() {
         });
     }
 
+    //Set the download media button to record all downloads
+    $('#downloadMediaBtn').click(function() {
+        var mediaid = $('#mediaidJS').val();
+        
+        $.post("media_download_process.php",
+        {
+            id: mediaid
+        });
+    });
+
     //Set the favorite media button onclick
     setFavoriteMediaOnclick();
 

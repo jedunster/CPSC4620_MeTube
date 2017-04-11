@@ -223,6 +223,9 @@ if(isset($_GET['id']))
                     
             }
 ?>
+            <a href='<?php echo $filepath;?>' target='_blank' id='downloadMediaBtn' class='btn btn-primary download-media-btn'>
+                Download
+            </a>
             <div id='playlistDropdownContainer' class='playlist-dropdown-container'>
                 <?php include 'playlistDropdown.php'; ?>
             </div>
