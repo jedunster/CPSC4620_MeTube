@@ -141,10 +141,42 @@ h3.media-title{
     background-color: #dddddd;
 }
 
+.playlist-dropdown-container{
+    padding: 5px;
+    float:right;
+}
+
+.btn-favorite-media{
+    padding: 8px 5px 5px 5px;
+    font-size: 20px;
+    color: gold;
+    float: right;
+    cursor: pointer;
+}
+
+.btn-favorite-media:hover{
+    cursor: hand;
+    background-color: #dddddd;
+}
+
 .btn-comment-edit-submit{
 }
 
 .btn-comment-edit-cancel{
+}
+
+.playlist-dropdown-toggle{
+    font-size:12px !important;
+}
+
+.playlist-dropdown-button{
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.playlist-dropdown-button:hover{
+    background-color: #dddddd;
+    cursor: hand;
 }
 
 .edit-comment-container{

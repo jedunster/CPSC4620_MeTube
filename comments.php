@@ -1,11 +1,15 @@
 <?php
-	ini_set('session.save_path', getcwd(). '/tmp');
-	session_start();
+    if(session_id() == '')
+    {
+	    ini_set('session.save_path', getcwd(). '/tmp');
+        session_start();
+    }
 	include_once "function.php";
 ?>	
 <head>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<script src="js/jquery-3.2.0.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 </head>
 
