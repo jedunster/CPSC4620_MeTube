@@ -9,13 +9,13 @@
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Account</title>
+<script src="js/jquery-3.2.0.min.js"></script>
+<script src="js/account_page.js"></script>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 <script src="js/bootstrap.min.js"></script>
 <script src="Scripts/AC_ActiveX.js" type="text/javascript"></script>
 <script src="Scripts/AC_RunActiveContent.js" type="text/javascript"></script>
-<script src="js/jquery-3.2.0.min.js"></script>
-<script src="js/account_page.js"></script>
 
 </head>
 
@@ -43,10 +43,15 @@ if(isset($_GET['username']))
 				<div class="col-sm-3" style="height: 90.7vh; overflow-y: auto">
 					<br/>
 					<?php
-					echo "<h3 class=\"media-title\">";
+					echo "<input type=\"hidden\" id=\"username\" value=\"".$_GET['username']."\">";
+					if(isset($_SESSION['username']))
+						echo "<input type=\"hidden\" id=\"viewer\" value=\"".$_SESSION['username']."\">";
+
+					echo "<h3 id=\"userheader\" class=\"media-title\">";
+					
 					echo $_GET['username']."'s Profile &nbsp;";
 					
-					$issubbed = 0;
+					$issubbed = 0;//not subbed
 					if($query = mysqli_prepare(db_connect_id(), "SELECT * FROM subscription WHERE subscriber_username=? AND subscribee_username=?"))
 					{
 						mysqli_stmt_bind_param($query, "ss", $_SESSION['username'], $_GET['username']);
@@ -55,11 +60,11 @@ if(isset($_GET['username']))
 						mysqli_stmt_close($query);
 					}
 					if($result)
-						$issubbed = 1;
+						$issubbed = 1;//subbed
 					elseif(!isset($_SESSION['username']))
-						$issubbed = 2;
+						$issubbed = 2;//login
 					elseif($_SESSION['username'] == $_GET['username'])
-						$issubbed = 3;
+						$issubbed = 3;//edit account
 
 					echo "<br/><br/><br/>";
 					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" style=\"float: left\" value=".$issubbed.">";
@@ -185,7 +190,7 @@ if(isset($_GET['username']))
 						<h4>Playlists
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
-							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"newplaylist\">New playlist</button></h4>";
+							echo "<button type=\"button\" onclick=\"window.location.href='./addplaylist.php'\"class=\"btn btn-primary\" id=\"newplaylist\">New playlist</button></h4>";
 						else
 							echo "</h4>";
 
@@ -246,13 +251,9 @@ if(isset($_GET['username']))
 
                     </div>
                     <div class="row" style="height: 30.4vh; overflow-y: auto; border-top: solid grey">
-						<h4>Favorites
+						<h4>Favorites</h4>
 						<?php
-						if($_SESSION['username'] == $_GET['username'])
-							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"editfavorites\">Edit</button></h4>";
-						else
-							echo "</h4>";
-
+						
 						if($query = mysqli_prepare(db_connect_id(), "SELECT title, media.username, type, media.mediaid, upload_date, category FROM media JOIN favorited_media ON media.mediaid = favorited_media.mediaid WHERE favorited_media.username=? ORDER BY upload_date DESC"))
 						{
 							mysqli_stmt_bind_param($query, "s", $_GET['username']);
