@@ -14,6 +14,9 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="Scripts/AC_ActiveX.js" type="text/javascript"></script>
 <script src="Scripts/AC_RunActiveContent.js" type="text/javascript"></script>
+<script src="js/jquery-3.2.0.min.js"></script>
+<script src="js/account_page.js"></script>
+
 </head>
 
 <body>
@@ -38,6 +41,7 @@ if(isset($_GET['username']))
         <div class="container-fluid">
 			<div class="row">
 				<div class="col-sm-3" style="height: 90.7vh; overflow-y: auto">
+					<br/>
 					<?php
 					echo "<h3 class=\"media-title\">";
 					echo $_GET['username']."'s Profile &nbsp;";
@@ -52,9 +56,13 @@ if(isset($_GET['username']))
 					}
 					if($result)
 						$issubbed = 1;
+					elseif(!isset($_SESSION['username']))
+						$issubbed = 2;
+					elseif($_SESSION['username'] == $_GET['username'])
+						$issubbed = 3;
 
-
-					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" value=".$issubbed.">";
+					echo "<br/><br/><br/>";
+					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" style=\"float: left\" value=".$issubbed.">";
 					if(isset($_SESSION['username']))
 					{
 						if($_GET['username'] == $_SESSION['username'])
@@ -133,16 +141,47 @@ if(isset($_GET['username']))
 					</div>
 				</div>
                 <div class="col-sm-9">
-                    <div class="row" style="height: 30.2vh; overflow-y: auto">
+                    <div class="row" style="height: 28vh; overflow-y: auto; margin-bottom: 10px">
 						<h4>Uploads
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
-							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"newupload\">New upload</button></h4>";
+							echo "<button type=\"button\" onclick=\"window.location.href='./media_upload.php'\" class=\"btn btn-primary\" id=\"newupload\">New upload</button></h4>";
 						else
 							echo "</h4>";
+
+						if($query = mysqli_prepare(db_connect_id(), "SELECT title, type, mediaid, upload_date, category FROM media WHERE username=? ORDER BY upload_date DESC"))
+						{
+							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							$result = mysqli_stmt_execute($query);
+							mysqli_stmt_bind_result($query, $mediatitle, $mediatype, $mediaid, $mediadate, $mediacat);
+							while(mysqli_stmt_fetch($query))
+							{
+								echo "<div class=\"account-media-details-container\">";
+
+								switch(substr($mediatype,0,5))
+								{
+									case "video":
+										echo "<span class=\"glyphicon glyphicon-film\"></span> ";
+										break;
+									case "audio":
+										echo "<span class=\"glyphicon glyphicon-music\"></span> ";
+										break;
+									case "image":
+										echo "<span class=\"glyphicon glyphicon-picture\"></span> ";
+										break;
+									default: echo substr($mediatype,0,5);
+								}
+								echo "<a href=\"media.php?id=".$mediaid."\">".$mediatitle."</a><br/>";
+								echo "Uploaded: ".$mediadate."<br/>";
+								echo "Category: ".$mediacat; if($mediacat == NULL) echo "None";
+								echo "</div>";
+							}
+							mysqli_stmt_close($query);
+						}
+
 						?>
                     </div>
-                    <div class="row" style="height: 30.2vh; overflow-y: auto">
+                    <div class="row" style="height: 30.5vh; overflow-y: auto; margin-bottom: 10px; border-top: solid grey">
 						<h4>Playlists
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
@@ -150,29 +189,101 @@ if(isset($_GET['username']))
 						else
 							echo "</h4>";
 
-						if($query = mysqli_prepare(db_connect_id(), "SELECT playlist_id, name FROM playlist WHERE username=?"))
+
+
+
+
+						if($query = mysqli_prepare(db_connect_id(), "SELECT name, playlist_id FROM playlist WHERE playlist.username = ? ORDER BY creation_date DESC"))
 						{
 							mysqli_stmt_bind_param($query, "s", $_GET['username']);
 							$result = mysqli_stmt_execute($query);
-							mysqli_stmt_bind_result($query, $listid, $listname);
+							$query->store_result();
+							mysqli_stmt_bind_result($query, $listname, $listid);
 							while(mysqli_stmt_fetch($query))
 							{
-								echo "<a href=\"playlist.php?id=".$listid."\">".$listname."</a><br/>";
-								echo "The media list will be here<br/><br/>";
+								echo "<div style=\"float: left; margin-bottom: 10px\">";
+								echo "<a href=\"playlist.php?id=".$listid."\" style=\"font-size: 16px\">".$listname."</a><br/>";
+								if($query1 = mysqli_prepare(db_connect_id(), "SELECT title, username, media.mediaid, upload_date, category FROM playlist_media LEFT JOIN media ON playlist_media.mediaid = media.mediaid WHERE playlist_id = ? ORDER BY upload_date DESC"))	
+								{
+									mysqli_stmt_bind_param($query1, "i", $listid);
+									$result = mysqli_stmt_execute($query1);
+									$query1->store_result();
+									mysqli_stmt_bind_result($query1, $mediatitle, $mediauser, $mediaid, $mediadate, $mediacat);
+									while(mysqli_stmt_fetch($query1))
+									{
+										echo "<div class=\"account-media-details-container\">";
+
+										switch(substr($mediatype,0,5))
+										{
+											case "video":
+												echo "<span class=\"glyphicon glyphicon-film\"></span> ";
+												break;
+											case "audio":
+												echo "<span class=\"glyphicon glyphicon-music\"></span> ";
+												break;
+											case "image":
+												echo "<span class=\"glyphicon glyphicon-picture\"></span> ";
+												break;
+											default: echo substr($mediatype,0,5);
+										}
+										echo "<a href=\"media.php?id=".$mediaid."\">".$mediatitle."</a><br/>";
+										echo "Uploaded: ".$mediadate."<br/>";
+										echo "By: ".$mediauser."<br/>";
+										echo "Category: ".$mediacat; if($mediacat == NULL) echo "None";
+										echo "</div>";
+
+									}
+									
+								}
+								echo "</div>";
 							}
 							mysqli_stmt_close($query);
+
 						}
+
 
 						?>
 
                     </div>
-                    <div class="row" style="height: 30.3vh; overflow-y: auto">
+                    <div class="row" style="height: 30.4vh; overflow-y: auto; border-top: solid grey">
 						<h4>Favorites
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
 							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"editfavorites\">Edit</button></h4>";
 						else
 							echo "</h4>";
+
+						if($query = mysqli_prepare(db_connect_id(), "SELECT title, media.username, type, media.mediaid, upload_date, category FROM media JOIN favorited_media ON media.mediaid = favorited_media.mediaid WHERE favorited_media.username=? ORDER BY upload_date DESC"))
+						{
+							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							$result = mysqli_stmt_execute($query);
+							mysqli_stmt_bind_result($query, $mediatitle, $mediauser, $mediatype, $mediaid, $mediadate, $mediacat);
+							while(mysqli_stmt_fetch($query))
+							{
+								echo "<div class=\"account-media-details-container\">";
+
+								switch(substr($mediatype,0,5))
+								{
+									case "video":
+										echo "<span class=\"glyphicon glyphicon-film\"></span> ";
+										break;
+									case "audio":
+										echo "<span class=\"glyphicon glyphicon-music\"></span> ";
+										break;
+									case "image":
+										echo "<span class=\"glyphicon glyphicon-picture\"></span> ";
+										break;
+									default: echo substr($mediatype,0,5);
+								}
+								echo "<a href=\"media.php?id=".$mediaid."\">".$mediatitle."</a><br/>";
+								echo "Uploaded: ".$mediadate."<br/>";
+								echo "By: ".$mediauser."<br/>";
+								echo "Category: ".$mediacat; if($mediacat == NULL) echo "None";
+								echo "</div>";
+							}
+							mysqli_stmt_close($query);
+						}
+
 						?>
 
                     </div>
