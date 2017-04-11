@@ -133,6 +133,16 @@ h3.media-title{
     border: 1px solid grey;
 }
 
+.similar-media-container{
+    min-width:200px;
+    width: calc(100% - 864px);
+    float: right;
+    word-wrap: break-word;
+    text-align:center;
+    border: 1px solid grey;
+}
+
+
 .media-container-contents{
 	text-align: left;
 	word-wrap: break-word;
@@ -160,15 +170,65 @@ h3.media-title{
     background-color: #dddddd;
 }
 
+.playlist-dropdown-container{
+    padding: 5px;
+    float:right;
+}
+
+.btn-favorite-media{
+    padding: 8px 5px 5px 5px;
+    font-size: 20px;
+    color: gold;
+    float: right;
+    cursor: pointer;
+}
+
+.btn-favorite-media:hover{
+    cursor: hand;
+    background-color: #dddddd;
+}
+
 .btn-comment-edit-submit{
 }
 
 .btn-comment-edit-cancel{
 }
 
+.download-media-btn{
+    font-size:12px !important;
+    margin-top:5px;
+    float:right;
+}
+
+.playlist-dropdown-toggle{
+    font-size:12px !important;
+}
+
+.playlist-dropdown-button{
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.playlist-dropdown-button:hover{
+    background-color: #dddddd;
+    cursor: hand;
+}
+
 .edit-comment-container{
     position: relative;
 }
+
+.similar-media-details-container{
+	width: calc(100% - 10px);
+    margin: 0px auto 5px auto;
+	border: 1px solid grey;
+	white-space: nowrap;
+	overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+	padding: 3px;
+}
+
 
 .comment-validation{
     color: red;

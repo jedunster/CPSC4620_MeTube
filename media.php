@@ -1,6 +1,9 @@
 <?php
-	ini_set('session.save_path', getcwd(). '/tmp');
-	session_start();
+    if(session_id() == '')
+    {
+	    ini_set('session.save_path', getcwd(). '/tmp');
+        session_start();
+    }
 	include_once "function.php";
 ?>	
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -45,6 +48,136 @@ if(isset($_GET['id']))
     if($result)
     {
         echo "<h3 class='media-title'>$title</h3><br>";
+?>
+        <div id='similarMediaContainer' class='similar-media-container'>
+<?php
+            //Give other media in same playlist or category
+            if(isset($_REQUEST['playlistid']))
+            {
+                if($playlistCheckQuery = mysqli_prepare(db_connect_id(), "SELECT name FROM playlist WHERE playlist_id=?"))
+                {
+                    mysqli_stmt_bind_param($playlistCheckQuery, "i", $_REQUEST['playlistid']);
+                    $playlistCheckResult = mysqli_stmt_execute($playlistCheckQuery);
+                    mysqli_stmt_bind_result($playlistCheckQuery, $playlistName);
+                    $playlistCheckResult = $playlistCheckResult && mysqli_stmt_fetch($playlistCheckQuery);
+                    mysqli_stmt_close($playlistCheckQuery);
+                    
+                    //Get other videos from the same playlist
+                    if($playlistCheckResult)
+                    {
+                        echo "<h5>More Media in '<a href='playlist.php?id={$_REQUEST['playlistid']}'>$playlistName</a>':</h5>";
+                        if($similarQuery = mysqli_prepare(db_connect_id(), "SELECT media.title, media.type, media.mediaid, 
+                            media.upload_date, media.username FROM playlist_media INNER JOIN media ON 
+                            playlist_media.mediaid=media.mediaid WHERE playlist_media.playlist_id=? AND media.mediaid!=? 
+                            ORDER BY media.upload_date DESC LIMIT 10"))
+                        {
+                            mysqli_stmt_bind_param($similarQuery, "ii", $_REQUEST['playlistid'], $_GET['id']);
+                            if(mysqli_stmt_execute($similarQuery))
+                            {
+                                mysqli_stmt_bind_result($similarQuery, $simTitle, $simType, $simID, $simDate, $simUser);
+                                if(!mysqli_stmt_fetch($similarQuery))
+                                {
+                                    echo "<h6>No other media in same playlist..</h6>";
+                                }
+                                else
+                                {    
+                                    do
+                                    {
+                                        echo "<div class='similar-media-details-container'>";
+                                        switch(substr($simType,0,5))
+                                        {
+                                            case "video":
+                                                echo "<span class=\"glyphicon glyphicon-film\"></span> ";
+                                                break;
+                                            case "audio":
+                                                echo "<span class=\"glyphicon glyphicon-music\"></span> ";
+                                                break;
+                                            case "image":
+                                                echo "<span class=\"glyphicon glyphicon-picture\"></span> ";
+                                                break;
+                                            default: echo substr($mediatype,0,5);
+                                        }
+
+                                        echo "<a href='media.php?id=$simID'>$simTitle</a><br>";
+                                        echo "From: <a href='account.php?username=$simUser'>$simUser</a><br>";
+                                        echo "Uploaded: $simDate<br>";
+                                        echo "</div>";
+                                    } while(mysqli_stmt_fetch($similarQuery));
+                                }
+                            }
+                            else
+                                echo "<h6>No other media in same playlist.</h6>";
+                            mysqli_stmt_close($similarQuery);
+                        }
+                        else
+                        {
+                            echo "<h6>No other media in same playlist.</h6>".mysqli_error(db_connect_id());
+                        }
+
+                    }
+                    else
+                    {
+                        echo "<h6>Could not retrieve playlist info.</h6>";
+                    }
+                }
+                else
+                {
+                    echo "<h6>Could not retrieve playlist info.</h6>";
+                }
+
+            }
+            else
+            {
+                echo "<h5>More $category Media:</h5>";
+                if($similarQuery = mysqli_prepare(db_connect_id(), "SELECT title, type, mediaid, upload_date,
+                    username FROM media WHERE category=? AND mediaid != ? ORDER BY upload_date DESC LIMIT 10"))
+                {
+                    mysqli_stmt_bind_param($similarQuery, "si", $category, $_GET['id']);
+                    if(mysqli_stmt_execute($similarQuery))
+                    {
+                        mysqli_stmt_bind_result($similarQuery, $simTitle, $simType, $simID, $simDate, $simUser);
+                        if(!mysqli_stmt_fetch($similarQuery))
+                        {
+                            echo "<h6>No other media in same category.</h6>";
+                        }
+                        else
+                        {    
+                            do
+                            {
+                                echo "<div class='similar-media-details-container'>";
+                                switch(substr($simType,0,5))
+                                {
+                                    case "video":
+                                        echo "<span class=\"glyphicon glyphicon-film\"></span> ";
+                                        break;
+                                    case "audio":
+                                        echo "<span class=\"glyphicon glyphicon-music\"></span> ";
+                                        break;
+                                    case "image":
+                                        echo "<span class=\"glyphicon glyphicon-picture\"></span> ";
+                                        break;
+                                    default: echo substr($mediatype,0,5);
+                                }
+
+                                echo "<a href='media.php?id=$simID'>$simTitle</a><br>";
+                                echo "From: <a href='account.php?username=$simUser'>$simUser</a><br>";
+                                echo "Uploaded: $simDate<br>";
+                                echo "</div>";
+                            } while(mysqli_stmt_fetch($similarQuery));
+                        }
+                    }
+                    else
+                        echo "<h6>No media in same category</h6>";
+                    mysqli_stmt_close($similarQuery);
+                }
+                else
+                {
+                    echo "<h6>No media in same category</h6>";
+                }
+            }
+?>
+        </div>
+<?php
         echo "<div id='mediaContainer' class='media-container'>";
 
         if(substr($type,0,5)=="image") //view image
@@ -65,7 +198,38 @@ if(isset($_GET['id']))
         }
 ?>
         </div>
+
         <div id='mediaDetailsContainer' class='media-details-container'>
+<?php
+            if(isset($_SESSION['username']))
+            {
+                if($favQuery = mysqli_prepare(db_connect_id(), "SELECT username FROM favorited_media WHERE username=? AND mediaid=?"))
+                {
+                    mysqli_stmt_bind_param($favQuery, "si", $_SESSION['username'], $_GET['id']);
+                    $favResult = mysqli_stmt_execute($favQuery);
+                    mysqli_stmt_bind_result($favQuery, $favUser);
+                    $favResult = $favResult && mysqli_stmt_fetch($favQuery);
+                    mysqli_stmt_close($favQuery);
+                }
+                else
+                {
+                    $favResult = false;
+                }
+
+                if($favResult)
+                    echo "<span id='favoriteMediaButton' title='Unfavorite Media' class='glyphicon glyphicon-star btn-favorite-media'></span>";
+                else
+                    echo "<span id='favoriteMediaButton' title='Favorite Media' class='glyphicon glyphicon-star-empty btn-favorite-media'></span>";
+                    
+            }
+?>
+            <a href='<?php echo $filepath;?>' target='_blank' id='downloadMediaBtn' class='btn btn-primary download-media-btn'>
+                Download
+            </a>
+            <div id='playlistDropdownContainer' class='playlist-dropdown-container'>
+                <?php include 'playlistDropdown.php'; ?>
+            </div>
+
             <p class='media-description-value'>
                 <strong>Uploaded By:</strong>
                 <a href="account.php?username=<?php echo urlencode($username); ?>">
@@ -130,9 +294,6 @@ if(isset($_GET['id']))
         echo "<div id='commentSection'>";
         include "comments.php"; 
         echo "</div>";
-?>
-
-<?php
     }
     else
     {

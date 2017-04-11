@@ -1,6 +1,9 @@
 <?php
-    ini_set('session.save_path', getcwd(). '/tmp');
-	session_start();
+    if(session_id() == '')
+    {
+        ini_set('session.save_path', getcwd(). '/tmp');
+        session_start();
+    }
     include_once "function.php";
 
     //A PHP file to handle all ajax requests supplied by the media viewing page
@@ -109,6 +112,78 @@
                     echo "The comment text is not set correctly.";
                 }
                 break;
+            case 4:
+                //PHP code for handling AJAX request to unfavorite media
+                if(isset($_REQUEST['mediaid']) && isset($_SESSION['username']))
+                {
+                    if(remove_favorited_media($_SESSION['username'], $_REQUEST['mediaid']))
+                        echo "success";
+                    else
+                        echo "Failed to unfavorite media.";
+                }
+                else if(!isset($_REQUEST['mediaid']))
+                {
+                    echo "The media id is not set correctly.";
+                }
+                else if(!isset($_SESSION['username']))
+                {
+                    echo "You must be logged in to unfavorite a media item.";
+                }
+                break;
+            case 5:
+                //PHP code for handling AJAX request to favorite media
+                if(isset($_REQUEST['mediaid']) && isset($_SESSION['username']))
+                {
+                    if(add_favorited_media($_SESSION['username'], $_REQUEST['mediaid']))
+                        echo "success";
+                    else
+                        echo "Failed to favorite media.";
+                }
+                else if(!isset($_REQUEST['mediaid']))
+                {
+                    echo "The media id is not set correctly.";
+                }
+                else if(!isset($_SESSION['username']))
+                {
+                    echo "You must be logged in to favorite a media item.";
+                }
+                break;
+            case 6:
+                //PHP code for handling AJAX request to add media to playlist
+                if(isset($_REQUEST['mediaid']) && isset($_REQUEST['playlistid']))
+                {
+                    if(add_playlist_media($_REQUEST['playlistid'], $_REQUEST['mediaid']))
+                        echo "success";
+                    else
+                        echo "Failed to add media to playlist.";
+                }
+                else if(!isset($_REQUEST['mediaid']))
+                {
+                    echo "The media id is not set correctly.";
+                }
+                else if(!isset($_REQUEST['playlistid']))
+                {
+                    echo "The playlist id is not set correctly.";
+                }
+                break;
+            case 7:
+                //PHP code for handling AJAX request to remove media from a playlist
+                if(isset($_REQUEST['mediaid']) && isset($_REQUEST['playlistid']))
+                {
+                    if(remove_playlist_media($_REQUEST['playlistid'], $_REQUEST['mediaid']))
+                        echo "success";
+                    else
+                        echo "Failed to remove media from playlist.";
+                }
+                else if(!isset($_REQUEST['mediaid']))
+                {
+                    echo "The media id is not set correctly.";
+                }
+                else if(!isset($_REQUEST['playlistid']))
+                {
+                    echo "The playlist id is not set correctly.";
+                }
+                break;
             default:
                 echo "Invalid AJAX action supplied.";
                 break;
@@ -118,3 +193,4 @@
     {
         echo "The action was not set correctly.";
     }
+?>

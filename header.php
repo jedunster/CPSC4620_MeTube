@@ -1,3 +1,11 @@
+<?php
+    if(session_id() == '')
+    {
+	    ini_set('session.save_path', getcwd(). '/tmp');
+        session_start();
+    }
+?>
+
 <head>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 </head>
