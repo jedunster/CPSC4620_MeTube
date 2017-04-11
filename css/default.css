@@ -133,6 +133,16 @@ h3.media-title{
     border: 1px solid grey;
 }
 
+.similar-media-container{
+    min-width:200px;
+    width: calc(100% - 864px);
+    float: right;
+    word-wrap: break-word;
+    text-align:center;
+    border: 1px solid grey;
+}
+
+
 .media-container-contents{
 	text-align: left;
 	word-wrap: break-word;
@@ -201,6 +211,18 @@ h3.media-title{
 .edit-comment-container{
     position: relative;
 }
+
+.similar-media-details-container{
+	width: calc(100% - 10px);
+    margin: 0px auto 5px auto;
+	border: 1px solid grey;
+	white-space: nowrap;
+	overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+	padding: 3px;
+}
+
 
 .comment-validation{
     color: red;
