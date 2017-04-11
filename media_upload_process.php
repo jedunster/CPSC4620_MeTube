@@ -43,18 +43,28 @@ else
                 
             //insert into media table
             if($query = mysqli_prepare(db_connect_id(), "INSERT INTO media(mediaid,
-                title, username, type, path, size, upload_date) VALUES(NULL, ?, ?,
+                title, username, type, path, size, upload_date, description, category) VALUES(NULL, ?, ?,
                 ?, CONCAT(?, (SELECT AUTO_INCREMENT FROM information_schema.tables
-                WHERE table_name='media'), '.', ?), ?, NOW())"))
+                WHERE table_name='media'), '.', ?), ?, NOW(), ?, ?)"))
             {
-                $title = urlencode($_FILES['file']['name']);
-                mysqli_stmt_bind_param($query, "sssssi", $title, $username,
+                $title = $_POST["title"];
+		$description = $_POST["description"];
+		$category = $_POST["category"];
+                mysqli_stmt_bind_param($query, "sssssiss", $title, $username,
                     $_FILES['file']['type'], $dirfile, $pathinfo['extension'],
-                    $_FILES['file']['size']);
+                    $_FILES['file']['size'], $description, $category);
                 $insert = mysqli_stmt_execute($query)
                     or (unlink($upfile) and die("Insert into media error in media_upload_process.php " .mysqli_error(db_connect_id())))
                     or die("Insert into media error and delete file error in media_upload_process.php " .mysqli_error(db_connect_id()));
                 mysqli_stmt_close($query);
+		
+		//add keywords to media_keyword table
+		$mediaid = mysqli_insert_id(db_connect_id());
+		$keywords = array_from_keywords($_POST["keywords"]);
+		foreach($keywords as $current){
+			add_media_keyword($mediaid, $current);
+		}	
+
             }
             else
             {
@@ -69,7 +79,8 @@ else
     }
     else  
     {
-        $result="7"; //upload file failed
+	
+        $result= "here"; //upload file failed; was 7 in quotes
     }
 }
 
