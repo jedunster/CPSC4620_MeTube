@@ -15,6 +15,7 @@
 <script src="Scripts/AC_ActiveX.js" type="text/javascript"></script>
 <script src="Scripts/AC_RunActiveContent.js" type="text/javascript"></script>
 <script src="js/jquery-3.2.0.min.js"></script>
+<script src="js/account_page.js"></script>
 
 </head>
 
@@ -40,6 +41,7 @@ if(isset($_GET['username']))
         <div class="container-fluid">
 			<div class="row">
 				<div class="col-sm-3" style="height: 90.7vh; overflow-y: auto">
+					<br/>
 					<?php
 					echo "<h3 class=\"media-title\">";
 					echo $_GET['username']."'s Profile &nbsp;";
@@ -54,9 +56,13 @@ if(isset($_GET['username']))
 					}
 					if($result)
 						$issubbed = 1;
+					elseif(!isset($_SESSION['username']))
+						$issubbed = 2;
+					elseif($_SESSION['username'] == $_GET['username'])
+						$issubbed = 3;
 
-
-					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" value=".$issubbed.">";
+					echo "<br/><br/><br/>";
+					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" style=\"float: left\" value=".$issubbed.">";
 					if(isset($_SESSION['username']))
 					{
 						if($_GET['username'] == $_SESSION['username'])
@@ -135,11 +141,11 @@ if(isset($_GET['username']))
 					</div>
 				</div>
                 <div class="col-sm-9">
-                    <div class="row" style="height: 29vh; overflow-y: auto, margin-bottom: 10px">
+                    <div class="row" style="height: 28vh; overflow-y: auto; margin-bottom: 10px">
 						<h4>Uploads
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
-							echo "<button type=\"button\" class=\"btn btn-primary\" id=\"newupload\">New upload</button></h4>";
+							echo "<button type=\"button\" onclick=\"window.location.href='./media_upload.php'\" class=\"btn btn-primary\" id=\"newupload\">New upload</button></h4>";
 						else
 							echo "</h4>";
 
