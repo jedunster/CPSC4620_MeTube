@@ -1,7 +1,9 @@
 <?php
-ini_set('session.save_path', getcwd(). '/tmp');
-session_start();
-
+    if(session_id() == '')
+    {
+	    ini_set('session.save_path', getcwd(). '/tmp');
+        session_start();
+    }
 include_once "function.php";
 
 if(isset($_POST['submit'])) {

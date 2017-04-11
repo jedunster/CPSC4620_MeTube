@@ -553,7 +553,7 @@ function remove_favorited_media($username, $mediaid)
         $result = mysqli_stmt_execute($query);
         $affected = mysqli_affected_rows(db_connect_id());
         mysqli_stmt_close($query);
-        if (!$result || $affected < 1)
+        if (!$result || $affected < 0)
         {
             return false;
         }
@@ -606,6 +606,33 @@ function remove_playlist($playlist_id)
         $affected = mysqli_affected_rows(db_connect_id());
         mysqli_stmt_close($query);
         if (!$result || $affected < 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+		return false;
+    }
+}
+
+//Returns true if the playlist with the given playlist_id
+//contains the media with the given mediaid, false otherwise
+function get_playlist_contains_media($playlist_id, $mediaid)
+{
+    if($query = mysqli_prepare(db_connect_id(), "SELECT playlist_id FROM playlist_media
+        WHERE playlist_id=? AND mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "ii", $playlist_id, $mediaid);
+        $result = mysqli_stmt_execute($query);
+        mysqli_stmt_bind_result($query, $id);
+        $result = $result && mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
+        if (!$result)
         {
             return false;
         }
@@ -743,7 +770,7 @@ function remove_playlist_media($playlist_id, $mediaid)
         $result = mysqli_stmt_execute($query);
         $affected = mysqli_affected_rows(db_connect_id());
         mysqli_stmt_close($query);
-        if (!$result || $affected < 1)
+        if (!$result || $affected < 0)
         {
             return false;
         }

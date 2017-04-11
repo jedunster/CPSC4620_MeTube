@@ -1,6 +1,9 @@
 <?php
-ini_set('session.save_path', getcwd(). '/tmp');
-session_start();
+    if(session_id() == '')
+    {
+	    ini_set('session.save_path', getcwd(). '/tmp');
+        session_start();
+    }
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">

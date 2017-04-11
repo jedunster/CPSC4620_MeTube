@@ -1,6 +1,9 @@
 <?php
-	ini_set('session.save_path', getcwd(). '/tmp');
-	session_start();
+    if(session_id() == '')
+    {
+	    ini_set('session.save_path', getcwd(). '/tmp');
+        session_start();
+    }
 	include_once "function.php";
 ?>	
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -65,7 +68,35 @@ if(isset($_GET['id']))
         }
 ?>
         </div>
+
         <div id='mediaDetailsContainer' class='media-details-container'>
+<?php
+            if(isset($_SESSION['username']))
+            {
+                if($favQuery = mysqli_prepare(db_connect_id(), "SELECT username FROM favorited_media WHERE username=? AND mediaid=?"))
+                {
+                    mysqli_stmt_bind_param($favQuery, "si", $_SESSION['username'], $_GET['id']);
+                    $favResult = mysqli_stmt_execute($favQuery);
+                    mysqli_stmt_bind_result($favQuery, $favUser);
+                    $favResult = $favResult && mysqli_stmt_fetch($favQuery);
+                    mysqli_stmt_close($favQuery);
+                }
+                else
+                {
+                    $favResult = false;
+                }
+
+                if($favResult)
+                    echo "<span id='favoriteMediaButton' title='Unfavorite Media' class='glyphicon glyphicon-star btn-favorite-media'></span>";
+                else
+                    echo "<span id='favoriteMediaButton' title='Favorite Media' class='glyphicon glyphicon-star-empty btn-favorite-media'></span>";
+                    
+            }
+?>
+            <div id='playlistDropdownContainer' class='playlist-dropdown-container'>
+                <?php include 'playlistDropdown.php'; ?>
+            </div>
+
             <p class='media-description-value'>
                 <strong>Uploaded By:</strong>
                 <a href="account.php?username=<?php echo urlencode($username); ?>">
