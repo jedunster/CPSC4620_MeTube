@@ -43,16 +43,17 @@ else
                 
             //insert into media table
             if($query = mysqli_prepare(db_connect_id(), "INSERT INTO media(mediaid,
-                title, username, type, path, size, upload_date, description, category) VALUES(NULL, ?, ?,
+                title, username, type, path, size, upload_date, description, category, allow_comments) VALUES(NULL, ?, ?,
                 ?, CONCAT(?,(SELECT AUTO_INCREMENT FROM information_schema.tables
-                WHERE table_name='media'), '.', ?), ?, NOW(), ?, ?)"))
+                WHERE table_name='media'), '.', ?), ?, NOW(), ?, ?, ?)"))
             {
                 $title = $_POST["title"];
-		$description = $_POST["description"];
-		$category = $_POST["category"];
-                mysqli_stmt_bind_param($query, "sssssiss", $title, $username,
+		        $description = $_POST["description"];
+		        $category = $_POST["category"];
+		        $allowcomments = $_POST["allowComments"];
+                mysqli_stmt_bind_param($query, "sssssissi", $title, $username,
                     $_FILES['file']['type'],$dirfile, $pathinfo['extension'],
-                    $_FILES['file']['size'], $description, $category);
+                    $_FILES['file']['size'], $description, $category, $allowcomments);
                 $insert = mysqli_stmt_execute($query)
                     or (unlink($upfile) and die("Insert into media error in media_upload_process.php " .mysqli_error(db_connect_id())))
                     or die("Insert into media error and delete file error in media_upload_process.php " .mysqli_error(db_connect_id()));

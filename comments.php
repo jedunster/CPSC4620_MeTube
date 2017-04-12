@@ -5,15 +5,9 @@
         session_start();
     }
 	include_once "function.php";
-?>	
-<head>
-<link rel="stylesheet" type="text/css" href="css/default.css" />
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<script src="js/jquery-3.2.0.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-</head>
-
-<?php
+    
+    
+    
 if($query = mysqli_prepare(db_connect_id(), "SELECT comment_id, username, comment_date, message FROM comment WHERE mediaid=? ORDER BY comment_date DESC"))
 {
     mysqli_stmt_bind_param($query, "i", $_REQUEST['id']);

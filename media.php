@@ -29,11 +29,12 @@ if(isset($_GET['id']))
 {
     echo "<div id='bodyContent' class='body-content'>";
     //Get the media's information from the database
-    if($query = mysqli_prepare(db_connect_id(), "SELECT username, title, type, path, upload_date, description, category FROM media WHERE mediaid=?"))
+    if($query = mysqli_prepare(db_connect_id(), "SELECT username, title, type, path, upload_date, description,
+        category, allow_comments FROM media WHERE mediaid=?"))
     {
         mysqli_stmt_bind_param($query, "i", $_GET['id']);
         $result = mysqli_stmt_execute($query);
-        mysqli_stmt_bind_result($query, $username, $title, $type, $filepath, $date, $description, $category);
+        mysqli_stmt_bind_result($query, $username, $title, $type, $filepath, $date, $description, $category, $allowcomments);
         $result = $result && mysqli_stmt_fetch($query);
         mysqli_stmt_close($query);
     }
@@ -268,6 +269,11 @@ if(isset($_GET['id']))
             </p>
         </div>
         <br>
+        <input type="hidden" id="mediaidJS" name="mediaidJS" value="<?php echo $_GET['id']; ?>">
+        <?php
+        if($allowcomments)
+        {
+?>
         <h3 class='media-title'>Comments</h3>
         <br>
         <?php
@@ -289,11 +295,15 @@ if(isset($_GET['id']))
         }
         
         ?>
-        <input type="hidden" id="mediaidJS" name="mediaidJS" value="<?php echo $_GET['id']; ?>">
         <?php
         echo "<div id='commentSection'>";
         include "comments.php"; 
         echo "</div>";
+        }
+        else
+        {
+            echo "<h3 class='media-title'>Comments disabled for this media item.</h3>";
+        }
     }
     else
     {

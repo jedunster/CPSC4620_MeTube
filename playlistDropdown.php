@@ -5,15 +5,7 @@
         session_start();
     }
 	include_once "function.php";
-?>	
-<head>
-<link rel="stylesheet" type="text/css" href="css/default.css" />
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<script src="js/jquery-3.2.0.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-</head>
-
-<?php
+    
 if(isset($_SESSION['username']) && isset($_REQUEST['id']))
 {
     if($query = mysqli_prepare(db_connect_id(), "SELECT playlist_id, name FROM playlist WHERE username=?"))

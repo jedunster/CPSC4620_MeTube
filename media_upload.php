@@ -63,6 +63,11 @@ else
         	
 		<h4 style="margin-bottom:0px; margin-top: 20px;">Keywords (Space Separated)</h4>
                 <input name="keywords" type="text" id="keywords" class="form-control" style="width: 550px;">
+        
+        <h4 style="margin-bottom:0px; margin-top: 20px;">Allow Comments?</h4>
+                <input name="allowComments" type="checkbox" id="allowComments" class="form-control" style="float: left; width: 20px; height: 20px;" value="1" checked>
+                <input name="allowComments" type="hidden" id="allowCommentsHidden" value="0">
+        <br><br>
 
 
 		<input id="submitBtn" style="margin-top: 20px;" value="Upload" name="submit" type="submit" class="btn btn-primary"/>

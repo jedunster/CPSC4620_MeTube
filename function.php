@@ -269,15 +269,16 @@ function remove_media($mediaid)
 }
 
 //Sets the metadata for the media item with the given mediaid to have the given title,
-//description, category, and keywords. The keywords should take the form of an array of
-//strings containing a single keyword each. Returns true on a successfull change, false
-//on an unsuccessful change.
-function update_media_metadata($mediaid, $title, $description, $category, $keywords)
+//description, category, keywords, and allow comments status. The keywords should take
+//the form of an array of strings containing a single keyword each. Returns true on a
+//successful change, false on an unsuccessful change.
+function update_media_metadata($mediaid, $title, $description, $category, $keywords, $allow_comments)
 {
     if($query = mysqli_prepare(db_connect_id(), "UPDATE media SET title=?, description=?,
-        category=? WHERE mediaid=?"))
+        category=?, allow_comments=? WHERE mediaid=?"))
     {
-        mysqli_stmt_bind_param($query, "sssi", $title, $description, $category, $mediaid);
+        mysqli_stmt_bind_param($query, "sssii", $title, $description, $category,
+            $allow_comments, $mediaid);
         $result = mysqli_stmt_execute($query);
         $matched = get_matched_rows(db_connect_id());
         mysqli_stmt_close($query);
