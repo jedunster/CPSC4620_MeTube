@@ -308,7 +308,7 @@ if(isset($_GET['id']))
 else
 {
 ?>
-<meta http-equiv="refresh" content="0;url=browse.php">
+<meta http-equiv="refresh" content="0;url=index.php">
 <?php
 }
 ?>

@@ -33,7 +33,7 @@ if(isset($_GET['username']))
 {
     $passedUsername = $_GET['username'];
     $decodedUsername = urldecode($passedUsername);
-    if(!user_exist_check($decodedUsername))
+    if(user_exist_check($decodedUsername) != 1)
     {
         ?>
         <div class="alert alert-danger" style="text-align: center; margin-bottom: 5px">
@@ -336,7 +336,7 @@ elseif(isset($_SESSION['username']))
 else
 {
 ?>
-<meta http-equiv="refresh" content="0;url=browse.php">
+<meta http-equiv="refresh" content="0;url=index.php">
 <?php
 }
 ?>

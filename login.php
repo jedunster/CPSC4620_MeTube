@@ -23,7 +23,7 @@ if(isset($_POST['submit'])) {
 				if(isset($_SESSION['prevpage']) && $_SESSION['prevpage'] != "")
 					header('Location: '.$_SESSION['prevpage']);
 				else
-					header('Location: browse.php');
+					header('Location: index.php');
 			}		
 		}
 }
