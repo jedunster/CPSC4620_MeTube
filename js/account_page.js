@@ -76,9 +76,8 @@ $(document).ready(function() {
 	$('#messagebox').click(function(){
 		$('#messagesuccess').text("");
 		$('#messageerror').text("");
-		if($(this).val() == "Type your message here.")
-			$(this).val("");
-	});
+    });
+    
 
 	$('#messagesend').click(function(){
 		var message = $('#messagebox').val();
@@ -119,7 +118,92 @@ $(document).ready(function() {
 		request.fail(function(jqXHR, textStatus, errorThrown) {
 
 		});
-
-
 	});
+
+    //Code for deleting a media item on click
+    if($('.btn-delete-media').length)
+    {
+        $('.btn-delete-media').click(function() {
+            var mediaid = $(this).parent().find('[name="mediaidField"]').val();
+            var button = $(this);
+            
+            request = $.ajax({
+                url: "accountViewAjax.php",
+                type: "POST",
+                data: {'action': 3, 'mediaid': mediaid}
+            });
+
+            //If media deletion succeeds, remove its pane
+            request.done(function(data, textStatus, jqXHR) {
+                if(data === "success")
+                    button.parent().remove();
+                else
+                    alert("Failed to delete media item.");
+            });
+
+            //Warn user if the media deletion fails
+            request.fail(function(jqXHR, textStatus, errorThrown) {
+                alert("Failed to delete media item.");
+            });
+        });
+    }
+
+
+    //Code for removing media from playlists on
+    //the account page via AJAX
+    if($('.btn-remove-playlist-media').length)
+    {
+        $('.btn-remove-playlist-media').click(function() {
+            var playlistid = $(this).parent().find('[name="playlistidField"]').val();
+            var mediaid = $(this).parent().find('[name="mediaidField"]').val();
+            var button = $(this);
+            
+            request = $.ajax({
+                url: "mediaViewAjax.php",
+                type: "POST",
+                data: {'action': 7, 'playlistid': playlistid, 'mediaid': mediaid}
+            });
+
+            //If playlist remove succeeds, remove its pane
+            request.done(function(data, textStatus, jqXHR) {
+                if(data === "success")
+                    button.parent().remove();
+                else
+                    alert("Failed to remove media from playlist.");
+            });
+
+            //Warn user if the playlist remove fails
+            request.fail(function(jqXHR, textStatus, errorThrown) {
+                alert("Failed to remove media from playlist.");
+            });
+        });
+    }
+
+    //Set AJAX action for unfavoriting media
+    if($('.btn-account-remove-favorite').length)
+    {
+        $('.btn-account-remove-favorite').click(function() {
+            var mediaid = $(this).parent().find('[name="mediaidField"]').val();
+            var button = $(this);
+
+            request = $.ajax({
+                url: "mediaViewAjax.php",
+                type: "POST",
+                data: {'action': 4, 'mediaid': mediaid}
+            });
+
+            //If delete succeeds, refresh comments
+            request.done(function(data, textStatus, jqXHR) {
+                if(data === "success")
+                    button.parent().remove();
+                else
+                    alert("Failed to unfavorite media.");
+            });
+
+            //Warn user if the delete fails
+            request.fail(function(jqXHR, textStatus, errorThrown) {
+                alert("Failed to unfavorite media.");
+            });
+        });
+    }
 });

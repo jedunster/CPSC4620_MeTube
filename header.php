@@ -9,7 +9,7 @@
 <div id="headerContainer" class="container-fluid" style="padding: 10px 20px 0px 20px">
     <div class="row">
         <div id="logoContainer" class="col-md-1">
-            <a href="browse.php"><img src="images/logo.png"/></a>
+            <a href="index.php"><img src="images/logo.png"/></a>
         </div>
 
         <div class="col-md-2">
