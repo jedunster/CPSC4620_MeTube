@@ -263,3 +263,15 @@ h3.media-title{
     bottom: 0px;
     right: 0px;
 }
+
+.inbox-message-pane{
+	border: 1px solid grey;
+	padding: 5px;
+	margin: 5px 5px;
+}
+
+.inbox-message{
+	font-size: 14px;
+	word-wrap: break-word;
+	white-space: nowrap;
+}
