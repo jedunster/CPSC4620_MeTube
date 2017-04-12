@@ -56,7 +56,8 @@
 }
 
 .body-content{
-    width: 75%;
+    width: 60%;
+    min-width: 1200px;
     margin: 0px auto;
 }
 
@@ -161,6 +162,7 @@ h3.media-title{
 
 .similar-media-container{
     min-width:200px;
+    max-width: 400px;
     width: calc(100% - 864px);
     float: right;
     word-wrap: break-word;
@@ -304,11 +306,64 @@ h3.media-title{
 	padding: 3px;
 }
 
-
 .comment-validation{
     color: red;
     padding: 10px;
     position: absolute;
     bottom: 0px;
     right: 0px;
+}
+
+.account-edit-sidenav-container{
+    height: 300px;
+    float: left;
+    min-width: 300px;
+    border-width: 2px 2px 2px 0px;
+    border-color: grey;
+    border-style: solid;
+    border-radius: 0px 10px 10px 0px;
+    padding: 0px;
+}
+
+.account-edit-sidenav-button{
+    margin:0px;
+    height: 40px;
+    line-height: 40px;
+    border-width: 2px 0px 0px 0px;
+    border-color:grey;
+    border-style:solid;
+    text-align:center;
+    width: 100%;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+.account-edit-sidenav-button:hover{
+    background-color: #dddddd;
+    cursor: hand;
+}
+
+.account-edit-sidenav-button.bottom{
+    border-width: 2px 0px 2px 0px;
+}
+
+.account-edit-sidenav-button.active{
+    background-color: #bbbbbb;
+    cursor: pointer;
+}
+
+.account-edit-sidenav-button.active:hover{
+    cursor: pointer;
+}
+
+.sidenav-icon{
+    float: right;
+    line-height: 40px;
+    padding: 0px 5px;
+}
+
+.account-edit-form{
+    margin-left: 400px;
+    margin-right: 20px;
+    min-width: 600px;
 }
