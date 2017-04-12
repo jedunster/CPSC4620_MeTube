@@ -19,6 +19,7 @@ $_SESSION['prevpage'] = "messages.php";
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 <script src="js/bootstrap.min.js"></script>
+<script src="js/message_page.js"></script>
 
 </head>
 
@@ -54,7 +55,7 @@ if($loggedin)
 					<?php
 					echo "<div style='font-size: 16px'>From: <a href=account.php?username=".$sender.">".$sender."</a> ";
 					echo "sent: ".$messagedate;
-					echo "<button type='button' id='reply' value='".$messageid."' class='btn btn-primary' style='float: right; margin-right: 10px; margin-top: 5px'>Reply</button></div><br/>";
+					echo "<button type='button' id='reply' value='".$sender."' class='btn btn-primary' style='float: right; margin-right: 10px; margin-top: 5px'>Reply</button></div><br/>";
 					echo "<div class='inbox-message'>".$message."</div>";
 					?>	
 					</div>
@@ -64,31 +65,46 @@ if($loggedin)
 				if($rows == 0)
 					echo "<h3 style='margin-left: 30px'>No messages</h3>";
 			}
+			mysqli_stmt_close($query);
 			?>
 		</div>
 		<div class="col-sm-4" style="height: 90vh; overflow-y: auto">
 			<h3 style="margin-left: 30px; float: left">Sent Messages</h3><br/><br/><br/>
 			<?php
-			if($query = mysqli_prepare(db_connect_id(), "SELECT message.message_id, recipient_username, send_date, message_contents FROM message_recipient JOIN message ON message.message_id = message_recipient.message_id WHERE sender_username = ? ORDER BY send_date DESC"))
+			if($query = mysqli_prepare(db_connect_id(), "SELECT message_id, send_date, message_contents FROM message WHERE sender_username = ? ORDER BY send_date DESC"))
 			{
 				mysqli_stmt_bind_param($query, "s", $currentuser);
 				$result = mysqli_stmt_execute($query);
+				$query->store_result();
 				$rows = 0;
-				mysqli_stmt_bind_result($query, $messageid, $recipient, $messagedate, $message);
+				mysqli_stmt_bind_result($query, $messageid, $messagedate, $message);
 				while($result = mysqli_stmt_fetch($query))
 				{
 					$rows++;
 				?>
 					<div class="inbox-message-pane">
 					<?php
-					echo "<div style='font-size: 16px'>Sent to: <a href=account.php?username=".$recipient.">".$recipient."</a> ";
-					echo "on: ".$messagedate."</div><br/>";
+					echo "<div style='font-size: 16px'>Sent to: ";
+					if($query1 = mysqli_prepare(db_connect_id(), "SELECT recipient_username FROM message_recipient WHERE message_id = ?"))
+					{
+						mysqli_stmt_bind_param($query1, "i", $messageid);
+						$result = mysqli_stmt_execute($query1);
+						$query1->store_result();
+						mysqli_stmt_bind_result($query1, $recipient);
+						while($result = mysqli_stmt_fetch($query1))
+						{
+							echo "<a href=account.php?username=".$recipient.">".$recipient."</a>; ";
+						}
+						mysqli_stmt_close($query1);
+					}
+					echo "<br>on: ".$messagedate."</div><br/>";
 					echo "<div class='inbox-message'>".$message."</div>";
 					?>	
 					</div>
 
 				<?php
 				}
+				mysqli_stmt_close($query);
 				if($rows == 0)
 					echo "<h3 style='margin-left: 30px'>No messages</h3>";
 			}
@@ -97,11 +113,15 @@ if($loggedin)
 		</div>
 		<div class="col-sm-4" style="height: 90vh; overflow-y:auto">
 			<h3 style="margin-left: 30px; float: left">Create a message</h3><br/><br/><br/>
-			<div style="font-size: 16px">Recipients:</div><div style="font-size: 11px">&nbsp;&nbsp;&nbsp;separate usernames with commas</div>
+			<div style="font-size: 16px">Recipients:</div>
+			<div style="font-size: 11px">&nbsp;&nbsp;&nbsp;separate usernames with commas</div>
 			<input type="text" class="form-control" id="recipients" style="width: 30vw">
 			<div style="font-size: 16px">Message:</div>
-			<textarea class="form-control" rows="10" style="width: 30vw; resize: none"></textarea><br/>
-			<button class="btn btn-primary" id="sendmessage">Send</button> 
+			<textarea class="form-control" id="messagecontents" rows="10" style="width: 30vw; resize: none"></textarea><br/>
+			<button class="btn btn-primary" id="sendmessage">Send</button><br/><br/>
+			<div id="messagesuccess" style="float: left; font-color: blue"></div>
+			<div id="messageerror" style="float: left; font-color: red"></div>
+
 		</div>
 	</div>
 </div>
