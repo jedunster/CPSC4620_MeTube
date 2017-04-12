@@ -44,8 +44,24 @@ if(isset($_REQUEST['action']))
 					echo "failed";
 				 
 			}
-			
 			break;
+        case 3://delete media item
+            if(isset($_REQUEST['mediaid']))
+            {
+                if(remove_media($_REQUEST['mediaid']))
+                {
+                    echo "success";
+                }
+                else
+                {
+                    echo "Error deleting media.";
+                }
+            }
+            else
+            {
+                echo "The mediaid field is not properly set.";
+            }
+            break;
 		default:
 			echo "default";
 			break;

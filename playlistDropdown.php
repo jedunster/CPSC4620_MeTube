@@ -56,6 +56,10 @@ if(isset($_SESSION['username']) && isset($_REQUEST['id']))
 
         mysqli_stmt_close($query);
     }
+    else if($result)
+    {
+        echo "<li class='playlist-dropdown-text'>No playlists found.</li>";
+    }
     echo "</ul></div>";
     
 }

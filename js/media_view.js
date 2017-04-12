@@ -45,7 +45,7 @@ $(document).ready(function() {
             });
         }
 
-        //Set AJAX action for unfavoriting media
+        //Set AJAX action for favoriting media
         if($('#favoriteMediaButton.glyphicon-star-empty').length)
         {
             $('#favoriteMediaButton.glyphicon-star-empty').off('click');
