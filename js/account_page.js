@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	$('#editsub').click(function() {
 		var subval = $(this).val();
-		var pageusername = $('#username').val();
+		var username = $('#username').val();
 
 		switch(subval)
 		{
@@ -10,7 +10,7 @@ $(document).ready(function() {
 				request = $.ajax({
 					url: "accountViewAjax.php",
 					type: "POST",
-					data: {'action': 0, 'pageusername': pageusername}
+					data: {'action': 0, 'username': username}
 				});
 
 				request.done(function(data, textStatus, jqXHR) {
@@ -37,7 +37,7 @@ $(document).ready(function() {
 				request = $.ajax({
 					url: "accountViewAjax.php",
 					type: "POST",
-					data: {'action': 1, 'pageusername': pageusername}
+					data: {'action': 1, 'username': username}
 					
 				});
 
@@ -71,7 +71,54 @@ $(document).ready(function() {
 				alert("Something went wrong");
 				break;
 		}
+	});
 
+	$('#messagebox').click(function(){
+		$('#messagesuccess').text("");
+		$('#messageerror').text("");
+		if($(this).val() == "Type your message here.")
+			$(this).val("");
+	});
+
+	$('#messagesend').click(function(){
+		var message = $('#messagebox').val();
+		var username = $('#username').val();
+
+		request = $.ajax({
+			url: "accountViewAjax.php",
+			type: "POST",
+			data: {'action': 2, 'username': username, 'message': message}
+		});
+
+		request.done(function(data, textStatus, jqXHR) {
+			if(data === "success")
+			{
+				$('#messageerror').text("");
+				$('#messagesuccess').text("Message sent");
+				$('#messagebox').val("");
+			}
+			else if(data === "empty")
+			{
+				$('#messagesuccess').text("");
+				$('#messageerror').text("Cannot send empty message");
+			}
+			else if(data === "long")
+			{
+				$('#messagesuccess').text("");
+				$('#messageerror').text("Message too long");
+			}
+			else if(data === "short")
+			{
+				$('#messagesuccess').text("");
+				$('#messageerror').text("Message must be longer than 10 characters");
+			}
+			else
+				alert("Failed to send message");
+		});
+
+		request.fail(function(jqXHR, textStatus, errorThrown) {
+
+		});
 
 
 	});

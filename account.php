@@ -1,8 +1,14 @@
 <?php
+if(session_id() == '')
+{
 	ini_set('session.save_path', getcwd(). '/tmp');
 	session_start();
-	include_once "function.php";
-?>	
+}
+include_once "function.php";
+
+if(isset($_GET['username'])) $_SESSION['prevpage'] = "account.php?username=".$_GET['username'];
+?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -40,7 +46,7 @@ if(isset($_GET['username']))
         ?>
         <div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-3" style="height: 90.7vh; overflow-y: auto">
+				<div class="col-sm-3" style="height: 90.4vh; overflow-y: auto">
 					<br/>
 					<?php
 					echo "<input type=\"hidden\" id=\"username\" value=\"".$_GET['username']."\">";
@@ -49,7 +55,7 @@ if(isset($_GET['username']))
 
 					echo "<h3 id=\"userheader\" class=\"media-title\">";
 					
-					echo $_GET['username']."'s Profile &nbsp;";
+					echo $_GET['username']."'s Profile";
 					
 					$issubbed = 0;//not subbed
 					if($query = mysqli_prepare(db_connect_id(), "SELECT * FROM subscription WHERE subscriber_username=? AND subscribee_username=?"))
@@ -66,8 +72,8 @@ if(isset($_GET['username']))
 					elseif($_SESSION['username'] == $_GET['username'])
 						$issubbed = 3;//edit account
 
-					echo "<br/><br/><br/>";
-					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" style=\"float: left\" value=".$issubbed.">";
+					echo "<br/><br/><br/></h3>";
+					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" value=".$issubbed.">";
 					if(isset($_SESSION['username']))
 					{
 						if($_GET['username'] == $_SESSION['username'])
@@ -87,7 +93,10 @@ if(isset($_GET['username']))
 						echo "Login to subscribe";
 					}
 
-					echo "</button></h3><br/><br/>";
+					echo "</button>&nbsp;";
+					if(isset($_SESSION['username']) && $_GET['username'] == $_SESSION['username'])
+						echo "<button type=\"button\" id=\"viewmessages\" class=\"btn btn-primary\" onclick=\"window.location.href='./messages.php'\">Messages</button>";
+					echo"<br/><br/>";
 					?>
 					<h4>
 						About me:
@@ -122,14 +131,18 @@ if(isset($_GET['username']))
 						{
 							echo "Send " . $_GET['username'] . " a message:<br/>";
 							?>
-							<textarea rows="4" maxlength="750" class="form-control commment-text" style="resize: none">Type your message here.</textarea>
+							<textarea id="messagebox" rows="4" maxlength="1000" class="form-control commment-text" style="resize: none">Type your message here.</textarea>
 							<br/>
 							<button type="button" class="btn btn-primary" id="messagesend">Send</button>
-							<br/>
+							<br/><br/>
 							<?php
 						}
-						
-						echo "<br/><br/><h4>My subscriptions:</h4><br/>";
+						?>
+						<div id="messageerror" style="color: red"></div>
+						<div id="messagesuccess" style="color: blue"></div>
+						<br/>
+						<?php	
+						echo "<h4>My subscriptions:</h4><br/>";
 						$subbeduser = "";
 						if($query = mysqli_prepare(db_connect_id(), "SELECT subscribee_username FROM subscription WHERE subscriber_username=?"))
 						{
@@ -186,7 +199,7 @@ if(isset($_GET['username']))
 
 						?>
                     </div>
-                    <div class="row" style="height: 30.5vh; overflow-y: auto; margin-bottom: 10px; border-top: solid grey">
+                    <div class="row" style="height: 30.3vh; overflow-y: auto; margin-bottom: 10px; border-top: solid grey">
 						<h4>Playlists
 						<?php
 						if($_SESSION['username'] == $_GET['username'])
@@ -250,7 +263,7 @@ if(isset($_GET['username']))
 						?>
 
                     </div>
-                    <div class="row" style="height: 30.4vh; overflow-y: auto; border-top: solid grey">
+                    <div class="row" style="height: 30vh; overflow-y: auto; border-top: solid grey">
 						<h4>Favorites</h4>
 						<?php
 						

@@ -12,35 +12,39 @@ if(isset($_REQUEST['action']))
 	switch($_REQUEST['action'])
 	{
 		case 0://subscribe
-			if(isset($_REQUEST['pageusername']) && isset($_SESSION['username']) && $query = mysqli_prepare(db_connect_id(), "INSERT INTO subscription (subscriber_username, subscribee_username) VALUES (?, ?)"))
-			{
-				mysqli_stmt_bind_param($query, "ss", $_SESSION['username'], $_REQUEST['pageusername']);
-				$result = mysqli_stmt_execute($query);
-				if($result)
-					echo "success";
-				else 
-					echo "failed";
-				mysqli_stmt_close($query);
-			}
-			else echo "failed";
+			if(isset($_REQUEST['username']) && isset($_SESSION['username']) && add_subscription($_SESSION['username'], $_REQUEST['username']))
+				echo "success";
+			else
+				echo "failed";
 			break;
 		
 		case 1://unsubscribe
-			if(isset($_REQUEST['pageusername']) && isset($_SESSION['username']) && $query = mysqli_prepare(db_connect_id(), "DELETE FROM subscription WHERE subscriber_username = ? AND subscribee_username = ?"))
-			{
-				mysqli_stmt_bind_param($query, "ss", $_SESSION['username'], $_REQUEST['pageusername']);
-				$result = mysqli_stmt_execute($query);
-				if($result)
-					echo "success";
-				else
-					echo "failed here";
-				mysqli_stmt_close($query);
-			}
-			//else echo "failed";
+			if(isset($_REQUEST['username']) && isset($_SESSION['username']) && remove_subscription($_SESSION['username'], $_REQUEST['username']))
+				echo "success";
+			else 
+				echo "failed";
 
 			break;
 
 		case 2://send message
+			if(isset($_REQUEST['message']) && isset($_SESSION['username']) && isset($_REQUEST['username']))
+			{
+				$message = trim($_REQUEST['message']);
+				
+				
+				if(strlen($message) == 0)
+					echo "empty";
+				elseif(strlen($message) < 10)
+					echo "short";
+				elseif(strlen($message) > 1000)
+					echo "long";
+				elseif(add_message($_SESSION['username'], $message, array($_REQUEST['username'])))
+					echo "success";
+				else
+					echo "failed";
+				 
+			}
+			
 			break;
 		default:
 			echo "default";
