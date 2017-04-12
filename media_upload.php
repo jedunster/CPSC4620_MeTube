@@ -12,8 +12,9 @@
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/default.css">
-	<script src="js/jquery-3.2.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+ 	<script src="js/jquery-3.2.0.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/media_upload.js"></script>
 <title>Upload</title>
 </head>
 
@@ -28,7 +29,7 @@ if(!isset($_SESSION['username']))
 else
 {
 ?>
-<div style="margin-left: 15px;">
+<div style="margin-left: 30px;">
 
 
 	<form class="form-horizontal" method="post" action="media_upload_process.php" enctype="multipart/form-data" >
@@ -41,14 +42,14 @@ else
 				
     			Browse 
 		 <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-		<input name="file" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
+		<input name="file" id="fileInput" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
 		</label>
 		<span class="label label-info" id="upload-file-info">Choose a file </span>
 		<h4 style="margin-bottom:0px; margin-top: 20px;">Title</h4>
-		<input name="title" type="text" class="form-control" style="width: 300px;">
+		<input id="title" name="title" type="text" class="form-control" style="width: 550px;">
 
 		<h4 style="margin-bottom:0px; margin-top: 20px;">Description</h4>
-  		<textarea name="description" class="form-control" rows="5" style="width: 300px;"></textarea>
+  		<textarea id="description" name="description" class="form-control" rows="5" style="resize: none; width: 550px;"></textarea>
 
 		<h4 style="margin-bottom:0px; margin-top: 20px;">Category</h4>
 		<select name="category"class="form-control" style="width: 175px;">
@@ -61,16 +62,16 @@ else
 
         	
 		<h4 style="margin-bottom:0px; margin-top: 20px;">Keywords (Space Separated)</h4>
-                <input name="keywords" type="text" class="form-control" style="width: 300px;">
+                <input name="keywords" type="text" id="keywords" class="form-control" style="width: 550px;">
 
 
-		<input style="margin-top: 20px;" value="Upload" name="submit" type="submit" class="btn btn-primary"/>
+		<input id="submitBtn" style="margin-top: 20px;" value="Upload" name="submit" type="submit" class="btn btn-primary"/>
     		
  		
                 
 	</form>
 
-<h5 style="margin-top: 20px">Supports File Formats supported by HTML5</h5>
+<h5 style="margin-top: 20px">Supports File Formats:<br> .ico .cur .wav .mp3 .mp4 .webm .ogg .gif .png .jpg .jpeg .svg .bmp</h5>
 </div>
 </body>
 </html>
