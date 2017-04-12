@@ -22,8 +22,9 @@ if(isset($_POST['submit'])) {
 				$_SESSION['username']=$_POST['username']; //Set the $_SESSION['username']
 				if(isset($_SESSION['prevpage']) && $_SESSION['prevpage'] != "")
 				{
+					$returnto = $_SESSION['prevpage'];
 					$_SESSION['prevpage'] = "";
-					header('Location: '.$_SESSION['prevpage']);
+					header('Location: '.$returnto);
 				}
 				else
 					header('Location: index.php');
