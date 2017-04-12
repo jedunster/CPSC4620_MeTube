@@ -31,7 +31,9 @@ if(isset($_GET['username'])) $_SESSION['prevpage'] = "account.php?username=".$_G
 
 if(isset($_GET['username']))
 {
-    if(!user_exist_check($_GET['username']))
+    $passedUsername = $_GET['username'];
+    $decodedUsername = urldecode($passedUsername);
+    if(!user_exist_check($decodedUsername))
     {
         ?>
         <div class="alert alert-danger" style="text-align: center; margin-bottom: 5px">
@@ -49,18 +51,18 @@ if(isset($_GET['username']))
 				<div class="col-sm-3" style="height: 90.4vh; overflow-y: auto">
 					<br/>
 					<?php
-					echo "<input type=\"hidden\" id=\"username\" value=\"".$_GET['username']."\">";
+					echo "<input type=\"hidden\" id=\"username\" value=\"".$decodedUsername."\">";
 					if(isset($_SESSION['username']))
 						echo "<input type=\"hidden\" id=\"viewer\" value=\"".$_SESSION['username']."\">";
 
 					echo "<h3 id=\"userheader\" class=\"media-title\">";
 					
-					echo $_GET['username']."'s Profile";
+					echo $decodedUsername."'s Profile";
 					
 					$issubbed = 0;//not subbed
 					if($query = mysqli_prepare(db_connect_id(), "SELECT * FROM subscription WHERE subscriber_username=? AND subscribee_username=?"))
 					{
-						mysqli_stmt_bind_param($query, "ss", $_SESSION['username'], $_GET['username']);
+						mysqli_stmt_bind_param($query, "ss", $_SESSION['username'], $decodedUsername);
 						$result = mysqli_stmt_execute($query);
 						$result = mysqli_stmt_fetch($query);
 						mysqli_stmt_close($query);
@@ -69,14 +71,14 @@ if(isset($_GET['username']))
 						$issubbed = 1;//subbed
 					elseif(!isset($_SESSION['username']))
 						$issubbed = 2;//login
-					elseif($_SESSION['username'] == $_GET['username'])
+					elseif($_SESSION['username'] == $decodedUsername)
 						$issubbed = 3;//edit account
 
 					echo "<br/><br/><br/></h3>";
 					echo "<button type=\"button\" id=\"editsub\" class=\"btn btn-primary\" value=".$issubbed.">";
 					if(isset($_SESSION['username']))
 					{
-						if($_GET['username'] == $_SESSION['username'])
+						if($decodedUsername == $_SESSION['username'])
 						{
 							echo "Edit profile";
 						}
@@ -94,7 +96,7 @@ if(isset($_GET['username']))
 					}
 
 					echo "</button>&nbsp;";
-					if(isset($_SESSION['username']) && $_GET['username'] == $_SESSION['username'])
+					if(isset($_SESSION['username']) && $decodedUsername == $_SESSION['username'])
 						echo "<button type=\"button\" id=\"viewmessages\" class=\"btn btn-primary\" onclick=\"window.location.href='./messages.php'\">Messages</button>";
 					echo"<br/><br/>";
 					?>
@@ -107,7 +109,7 @@ if(isset($_GET['username']))
 						$bio = "";
 						if($query = mysqli_prepare(db_connect_id(), "SELECT email, summary FROM account WHERE username=?"))
 						{
-							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							mysqli_stmt_bind_param($query, "s", $decodedUsername);
 							$result = mysqli_stmt_execute($query);
 							mysqli_stmt_bind_result($query, $email, $bio);
 							$result = $result && mysqli_stmt_fetch($query);
@@ -127,11 +129,11 @@ if(isset($_GET['username']))
 						echo "</p>";
 						echo "</div><br/><br/>";
 
-						if(isset($_SESSION['username']) && $_SESSION['username'] != $_GET['username'])
+						if(isset($_SESSION['username']) && $_SESSION['username'] != $decodedUsername)
 						{
-							echo "Send " . $_GET['username'] . " a message:<br/>";
+							echo "Send " . $decodedUsername . " a message:<br/>";
 							?>
-							<textarea id="messagebox" rows="4" maxlength="1000" class="form-control commment-text" style="resize: none">Type your message here.</textarea>
+                            <textarea id="messagebox" rows="4" maxlength="1000" class="form-control commment-text" style="resize: none" placeholder="Type your message here."></textarea>
 							<br/>
 							<button type="button" class="btn btn-primary" id="messagesend">Send</button>
 							<br/><br/>
@@ -146,7 +148,7 @@ if(isset($_GET['username']))
 						$subbeduser = "";
 						if($query = mysqli_prepare(db_connect_id(), "SELECT subscribee_username FROM subscription WHERE subscriber_username=?"))
 						{
-							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							mysqli_stmt_bind_param($query, "s", $decodedUsername);
 							$result = mysqli_stmt_execute($query);
 							mysqli_stmt_bind_result($query, $subbeduser);
 							while(mysqli_stmt_fetch($query))
@@ -162,19 +164,27 @@ if(isset($_GET['username']))
                     <div class="row" style="height: 28vh; overflow-y: auto; margin-bottom: 10px">
 						<h4>Uploads
 						<?php
-						if($_SESSION['username'] == $_GET['username'])
-							echo "<button type=\"button\" onclick=\"window.location.href='./media_upload.php'\" class=\"btn btn-primary\" id=\"newupload\">New upload</button></h4>";
+						if($_SESSION['username'] == $decodedUsername)
+							echo "<a href=\"media_upload.php\" class=\"btn btn-primary\" id=\"newupload\">New upload</a></h4>";
 						else
 							echo "</h4>";
 
 						if($query = mysqli_prepare(db_connect_id(), "SELECT title, type, mediaid, upload_date, category FROM media WHERE username=? ORDER BY upload_date DESC"))
 						{
-							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							mysqli_stmt_bind_param($query, "s", $decodedUsername);
 							$result = mysqli_stmt_execute($query);
 							mysqli_stmt_bind_result($query, $mediatitle, $mediatype, $mediaid, $mediadate, $mediacat);
 							while(mysqli_stmt_fetch($query))
 							{
 								echo "<div class=\"account-media-details-container\">";
+                                echo "<input type='hidden' name='mediaidField' value='$mediaid'>";
+
+
+                                if(isset($_SESSION['username']) && $_SESSION['username'] === $decodedUsername)
+                                {
+                                    echo "<span title='Delete Media' class='glyphicon glyphicon-remove btn-delete-media'></span>";
+                                    echo "<a href='editmedia.php?id=$mediaid'><span title='Edit Media Metadata' class='glyphicon glyphicon-pencil btn-edit-media-metadata'></span></a>";
+                                }
 
 								switch(substr($mediatype,0,5))
 								{
@@ -202,18 +212,14 @@ if(isset($_GET['username']))
                     <div class="row" style="height: 30.3vh; overflow-y: auto; margin-bottom: 10px; border-top: solid grey">
 						<h4>Playlists
 						<?php
-						if($_SESSION['username'] == $_GET['username'])
-							echo "<button type=\"button\" onclick=\"window.location.href='./addplaylist.php'\"class=\"btn btn-primary\" id=\"newplaylist\">New playlist</button></h4>";
+						if($_SESSION['username'] == $decodedUsername)
+							echo "<a href=\"addplaylist.php\" class=\"btn btn-primary\" id=\"newplaylist\">New playlist</a></h4>";
 						else
 							echo "</h4>";
 
-
-
-
-
 						if($query = mysqli_prepare(db_connect_id(), "SELECT name, playlist_id FROM playlist WHERE playlist.username = ? ORDER BY creation_date DESC"))
 						{
-							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							mysqli_stmt_bind_param($query, "s", $decodedUsername);
 							$result = mysqli_stmt_execute($query);
 							$query->store_result();
 							mysqli_stmt_bind_result($query, $listname, $listid);
@@ -230,6 +236,13 @@ if(isset($_GET['username']))
 									while(mysqli_stmt_fetch($query1))
 									{
 										echo "<div class=\"account-media-details-container\">";
+                                        echo "<input type='hidden' name='mediaidField' value='$mediaid'>";
+                                        echo "<input type='hidden' name='playlistidField' value='$listid'>";
+
+                                        if(isset($_SESSION['username']) && $_SESSION['username'] === $decodedUsername)
+                                        {
+                                            echo "<span title='Delete From Playlist' class='glyphicon glyphicon-remove btn-remove-playlist-media'></span>";
+                                        }
 
 										switch(substr($mediatype,0,5))
 										{
@@ -244,12 +257,11 @@ if(isset($_GET['username']))
 												break;
 											default: echo substr($mediatype,0,5);
 										}
-										echo "<a href=\"media.php?id=".$mediaid."\">".$mediatitle."</a><br/>";
+										echo "<a href=\"media.php?id=".$mediaid."&playlistid=".$listid."\">".$mediatitle."</a><br/>";
 										echo "Uploaded: ".$mediadate."<br/>";
 										echo "By: ".$mediauser."<br/>";
 										echo "Category: ".$mediacat; if($mediacat == NULL) echo "None";
 										echo "</div>";
-
 									}
 									
 								}
@@ -269,12 +281,19 @@ if(isset($_GET['username']))
 						
 						if($query = mysqli_prepare(db_connect_id(), "SELECT title, media.username, type, media.mediaid, upload_date, category FROM media JOIN favorited_media ON media.mediaid = favorited_media.mediaid WHERE favorited_media.username=? ORDER BY upload_date DESC"))
 						{
-							mysqli_stmt_bind_param($query, "s", $_GET['username']);
+							mysqli_stmt_bind_param($query, "s", $decodedUsername);
 							$result = mysqli_stmt_execute($query);
 							mysqli_stmt_bind_result($query, $mediatitle, $mediauser, $mediatype, $mediaid, $mediadate, $mediacat);
 							while(mysqli_stmt_fetch($query))
 							{
 								echo "<div class=\"account-media-details-container\">";
+                                echo "<input type='hidden' name='mediaidField' value='$mediaid'>";
+
+                                if(isset($_SESSION['username']) && $_SESSION['username'] === $decodedUsername)
+                                {
+                                    echo "<span title='Delete From Favorites' class='glyphicon glyphicon-remove btn-account-remove-favorite'></span>";
+                                }
+
 
 								switch(substr($mediatype,0,5))
 								{
