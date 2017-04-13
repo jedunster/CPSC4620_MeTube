@@ -291,6 +291,7 @@ h3.media-title{
 .download-media-btn{
     font-size:12px !important;
     margin-top:5px;
+    margin-right: 5px;
     float:right;
 }
 
