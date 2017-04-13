@@ -68,6 +68,71 @@
                     echo "You must be logged in to change your password.";
                 }
                 break;
+            case 2:
+                //PHP code for registering an account
+                if(isset($_REQUEST['username']) && isset($_REQUEST['password1']) 
+                && isset($_REQUEST['email']))
+                {
+                    switch(add_account_to_db($_REQUEST['username'], $_REQUEST['password1'],
+                                             $_REQUEST['email']))
+                    {
+                        case 0:
+                            echo "Add account operation failed.";
+                            break;
+                        case 1:
+                            //Log the user in if successful
+                            $_SESSION['username'] = $_REQUEST['username'];
+                            echo "success";
+                            break;
+                        case 2:
+                            echo "Username already exists.";
+                            break;
+                        default:
+                            echo "Add account operation failed.";
+                            break;
+                    }
+                }
+                else if(!isset($_REQUEST['username']))
+                {
+                    echo "The username field is not set correctly.";
+                }
+                else if(!isset($_REQUEST['password1']))
+                {
+                    echo "The password is not set correctly";
+                }
+                else if(!isset($_REQUEST['email']))
+                {
+                    echo "You email field is not set correctly.";
+                }
+                break;
+            case 3: 
+                //PHP code for checking if a username already exists
+                if(isset($_REQUEST['username']))
+                {
+                    switch(user_exist_check($_REQUEST['username']))
+                    {
+                        case 0:
+                            echo "success";
+                            break;
+                        case 1:
+                            echo "That username already exists.";
+                            break;
+                        case 2:
+                            echo "Error checking if username already exists.";
+                            break;
+                        case 3:
+                            echo "Error checking if username already exists.";
+                            break;
+                        default:
+                            echo "Error checking if username already exists.";
+                            break;
+                    }
+                }
+                else if(!isset($_REQUEST['username']))
+                {
+                    echo "The username field is not set correctly.";
+                }
+                break;
             default:
                 echo "Invalid AJAX action supplied.";
                 break;
