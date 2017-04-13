@@ -114,13 +114,13 @@ if($loggedin)
 		<div class="col-sm-4" style="height: 90vh; overflow-y:auto">
 			<h3 style="margin-left: 30px; float: left">Create a message</h3><br/><br/><br/>
 			<div style="font-size: 16px">Recipients:</div>
-			<div style="font-size: 11px">&nbsp;&nbsp;&nbsp;separate usernames with commas</div>
+			<div style="font-size: 11px">&nbsp;&nbsp;&nbsp;separate usernames with spaces</div>
 			<input type="text" class="form-control" id="recipients" style="width: 30vw">
 			<div style="font-size: 16px">Message:</div>
-			<textarea class="form-control" id="messagecontents" rows="10" style="width: 30vw; resize: none"></textarea><br/>
+			<textarea maxlength="1000" class="form-control" id="messagecontents" rows="10" style="width: 30vw; resize: none"></textarea><br/>
 			<button class="btn btn-primary" id="sendmessage">Send</button><br/><br/>
-			<div id="messagesuccess" style="float: left; font-color: blue"></div>
-			<div id="messageerror" style="float: left; font-color: red"></div>
+			<div id="messagesuccess" style="float: left; color: blue"></div>
+			<div id="messageerror" style="float: left; color: red"></div>
 
 		</div>
 	</div>

@@ -10,41 +10,71 @@ $(document).ready(function(){
 		$('#messagecontents').focus();
 	});
 
+
+	$('#messagecontents').click(function(){
+		$('#messagesuccess').text("");
+		$('#messageerror').text("");
+	});
+
+	$('#recipients').click(function(){
+		$('#messagesuccess').text("");
+		$('#messageerror').text("");
+	});
+
+
+	/* Sends an ajax request to try to send the message to the given recipients
+	 * upon clicking the send button
+	 */
 	$('#sendmessage').click(function(){
 		var recipientlist = $('#recipients').val();
 		var message = $('#messagecontents').val();
-
+		
 		request = $.ajax({
 			url: "messagePageAjax.php",
 			type: "POST",
-			data: {'action': 0, 'recipients': recipientList, 'message': message}
+			data: {'action': 0, 'recipients': recipientlist, 'message': message}
 		});
 
 		request.done(function(data, textStatus, jqXHR){
-			switch(data)
+			if(data == "success")
 			{
-				case "success":
-					$('#messageerror').text("");
-					$('#messagesuccess').text("Message sent successfully");
-					break;
-				case "empty":
-					$('#messagesuccess').text("");
-					$('#messageerror').text("Message cannot be empty");
-					break;
-				case "short":
-					$('#messagesuccess').text("");
-					$('#messageerror').text("Message must be over 10 characters");
-					break;
-				case "long":
-					$('#messagesuccess').text("");
-					$('#messageerror').text("Message cannot be over 1000 characters");
-					break;
+				$('#recipients').val("");
+				$('#messagecontents').val("");
+				$('#messageerror').text("");
+				$('#messagesuccess').text("Message sent successfully");
 			}
+			else if(data == "empty")
+			{
+				$('#messagesuccess').text("");
+				$('#messageerror').text("Message cannot be empty");
+			}
+			else if (data == "short")
+			{
+				$('#messagesuccess').text("");
+				$('#messageerror').text("Message must be over 10 characters");
+			}
+			else if(data == "long")
+			{
+				$('#messagesuccess').text("");
+				$('#messageerror').text("Message cannot be over 1000 characters");
+			}
+			else if(data == "failed")
+			{
+				$('#messagesuccess').text("");
+				$('#messageerror').text("");
+				alert("Failed to send message");
+			}
+			else if(data == "nousers")
+			{
+				$('#messagesuccess').text("");
+				$('#messageerror').text("Must have one or more recipients");
+			}
+			else
+				alert(data);
 		});
 
 		request.fail(function(jqXHR, textStatus, errorThrown){
 			alert("Failed to send message");
 		});
-
 	});
 });
