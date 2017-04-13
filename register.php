@@ -6,40 +6,54 @@
     }
 
 include_once "function.php";
-
-if(isset($_POST['submit'])) {
-	if( $_POST['passowrd1'] != $_POST['passowrd2']) {
-		$register_error = "Passwords don't match. Try again?";
-	}
-	else {
-		$check = add_account_to_db($_POST['username'], $_POST['passowrd1']);	
-		if($check == 1){
-			//echo "Rigister succeeds";
-			$_SESSION['username']=$_POST['username'];
-			header('Location: index.php');
-		}
-		else if($check == 2){
-			$register_error = "Username already exists. Please user a different username.";
-		}
-	}
-}
 ?>
 <html>
 <head>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script src="js/jquery-3.2.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/register_page.js"></script>
 </head>
 <body>
-<form action="register.php" method="post">
-	Username: <input type="text" name="username"> <br>
-	Create Password: <input  type="password" name="passowrd1"> <br>
-	Repeat password: <input type="password" name="passowrd2"> <br>
-	<input name="submit" type="submit" value="Submit">
-</form>
-
 <?php
-  if(isset($register_error))
-   {  echo "<div id='passwd_result'> register_error: ".$register_error."</div>";}
+    include "header.php";
 ?>
+
+<div id='bodyContent' class='body-content' style='text-align: center'>
+    <h3 class='registration-title'>Register for MeTube:</h3>
+    <form id="registrationForm" method="post">
+    <table class='registration-form' width='50%'>
+        <tr>
+            <td width="25%" class="registration-label">Username:</td>
+            <td width="50%"><input type="text" id="username" maxlength="30" name="username" class="form-control"><br></td>
+            <td width="25%" id="usernameValidation" class="registration-validation"></td>
+        </tr>
+        <tr>
+            <td width="25%" class="registration-label">Email:</td>
+            <td width="50%"><input type="text" id="email" maxlength="255" name="email" class="form-control"><br></td>
+            <td width="25%" id="emailValidation" class="registration-validation"></td>
+        </tr>
+        <tr>
+            <td width="25%" class="registration-label">Create Password:</td>
+            <td width="50%"><input type="password" id="password1" name="password1" class="form-control"><br></td>
+            <td width="25%" id="password1Validation" class="registration-validation"></td>
+        </tr>
+        <tr>
+            <td width="25%" class="registration-label">Repeat Password:</td>
+            <td width="50%"><input type="password" id="password2" name="password2" class="form-control"><br></td>
+            <td width="25%" id="password2Validation" class="registration-validation"></td>
+        </tr>
+        <tr>
+            <td width="25%"></td>
+            <td width="50%"><input name="submit" type="submit" value="Submit" class="btn btn-primary"></td>
+        </tr>
+    </table>
+    </form>
+</div>
 
 </body>
 </html>

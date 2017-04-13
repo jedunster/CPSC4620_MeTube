@@ -227,12 +227,12 @@ if(isset($_GET['username']))
 							{
 								echo "<div style=\"float: left; margin-bottom: 10px\">";
 								echo "<a href=\"playlist.php?id=".$listid."\" style=\"font-size: 16px\">".$listname."</a><br/>";
-								if($query1 = mysqli_prepare(db_connect_id(), "SELECT title, username, media.mediaid, upload_date, category FROM playlist_media LEFT JOIN media ON playlist_media.mediaid = media.mediaid WHERE playlist_id = ? ORDER BY upload_date DESC"))	
+								if($query1 = mysqli_prepare(db_connect_id(), "SELECT title, username, media.mediaid, upload_date, type, category FROM playlist_media LEFT JOIN media ON playlist_media.mediaid = media.mediaid WHERE playlist_id = ? ORDER BY upload_date DESC"))	
 								{
 									mysqli_stmt_bind_param($query1, "i", $listid);
 									$result = mysqli_stmt_execute($query1);
 									$query1->store_result();
-									mysqli_stmt_bind_result($query1, $mediatitle, $mediauser, $mediaid, $mediadate, $mediacat);
+									mysqli_stmt_bind_result($query1, $mediatitle, $mediauser, $mediaid, $mediadate, $mediatype, $mediacat);
 									while(mysqli_stmt_fetch($query1))
 									{
 										echo "<div class=\"account-media-details-container\">";

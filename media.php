@@ -29,11 +29,12 @@ if(isset($_GET['id']))
 {
     echo "<div id='bodyContent' class='body-content'>";
     //Get the media's information from the database
-    if($query = mysqli_prepare(db_connect_id(), "SELECT username, title, type, path, upload_date, description, category FROM media WHERE mediaid=?"))
+    if($query = mysqli_prepare(db_connect_id(), "SELECT username, title, type, path, upload_date, description,
+        category, allow_comments FROM media WHERE mediaid=?"))
     {
         mysqli_stmt_bind_param($query, "i", $_GET['id']);
         $result = mysqli_stmt_execute($query);
-        mysqli_stmt_bind_result($query, $username, $title, $type, $filepath, $date, $description, $category);
+        mysqli_stmt_bind_result($query, $username, $title, $type, $filepath, $date, $description, $category, $allowcomments);
         $result = $result && mysqli_stmt_fetch($query);
         mysqli_stmt_close($query);
     }
@@ -69,7 +70,7 @@ if(isset($_GET['id']))
                         if($similarQuery = mysqli_prepare(db_connect_id(), "SELECT media.title, media.type, media.mediaid, 
                             media.upload_date, media.username FROM playlist_media INNER JOIN media ON 
                             playlist_media.mediaid=media.mediaid WHERE playlist_media.playlist_id=? AND media.mediaid!=? 
-                            ORDER BY media.upload_date DESC LIMIT 10"))
+                            ORDER BY media.upload_date DESC"))
                         {
                             mysqli_stmt_bind_param($similarQuery, "ii", $_REQUEST['playlistid'], $_GET['id']);
                             if(mysqli_stmt_execute($similarQuery))
@@ -98,7 +99,7 @@ if(isset($_GET['id']))
                                             default: echo substr($mediatype,0,5);
                                         }
 
-                                        echo "<a href='media.php?id=$simID'>$simTitle</a><br>";
+                                        echo "<a href='media.php?id=$simID&playlistid={$_REQUEST['playlistid']}'>$simTitle</a><br>";
                                         echo "From: <a href='account.php?username=$simUser'>$simUser</a><br>";
                                         echo "Uploaded: $simDate<br>";
                                         echo "</div>";
@@ -268,6 +269,11 @@ if(isset($_GET['id']))
             </p>
         </div>
         <br>
+        <input type="hidden" id="mediaidJS" name="mediaidJS" value="<?php echo $_GET['id']; ?>">
+        <?php
+        if($allowcomments)
+        {
+?>
         <h3 class='media-title'>Comments</h3>
         <br>
         <?php
@@ -289,11 +295,15 @@ if(isset($_GET['id']))
         }
         
         ?>
-        <input type="hidden" id="mediaidJS" name="mediaidJS" value="<?php echo $_GET['id']; ?>">
         <?php
         echo "<div id='commentSection'>";
         include "comments.php"; 
-        echo "</div>";
+        echo "</div><br>";
+        }
+        else
+        {
+            echo "<h3 class='media-title'>Comments disabled for this media item.</h3>";
+        }
     }
     else
     {

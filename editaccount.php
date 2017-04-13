@@ -15,7 +15,8 @@
 	<link rel="stylesheet" type="text/css" href="css/default.css">
 	<script src="js/jquery-3.2.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <title>Edit Account</title>
+    <script src="js/edit_account_page.js"></script>
+    <title>Account Settings</title>
 </head>
 
 <body>
@@ -29,4 +30,20 @@
 	include "header.php";
 ?>
 
+    <div class="account-edit-sidenav-container">
+        <h3 style="text-align: center">Account Settings</h3>
+        <div id="editProfileTabButton" class='account-edit-sidenav-button active'>
+            Edit Profile Information
+            <span class='glyphicon glyphicon-menu-right sidenav-icon'></span>
+        </div>
+        <div id="updatePasswordTabButton" class='account-edit-sidenav-button bottom'>
+            Update Password
+            <span class='glyphicon glyphicon-menu-right sidenav-icon'></span>
+        </div>
+    </div>
+
+    <div id="accountEditForm" class="account-edit-form">
+        <?php include "editprofileinfo.php"; ?>
+    </div>
 </body>
+</html>

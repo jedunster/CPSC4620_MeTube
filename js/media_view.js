@@ -70,12 +70,12 @@ $(document).ready(function() {
                         setFavoriteMediaOnclick();
                     }
                     else
-                        alert("Failed to unfavorite media.");
+                        alert("Failed to favorite media.");
                 });
 
                 //Warn user if the delete fails
                 request.fail(function(jqXHR, textStatus, errorThrown) {
-                    alert("Failed to unfavorite media.");
+                    alert("Failed to favorite media.");
                 });
             });
         }
@@ -295,26 +295,28 @@ $(document).ready(function() {
     //Refresh the comments pane by loading it from the database
     function refreshComments()
     {
-        var mediaid = $('#mediaidJS').val();
+        if($("#commentSection").length)
+        {
+            var mediaid = $('#mediaidJS').val();
 
-        request = $.ajax({
-            url: "comments.php",
-            type: "POST",
-            data: { 'id': mediaid }
-        });
+            request = $.ajax({
+                url: "comments.php",
+                type: "POST",
+                data: { 'id': mediaid }
+            });
 
-        //If done correctly, set the comment section to the returned refresh
-        request.done(function(data, textStatus, jqXHR) {
-            $('#commentSection').html(data);
-            setDeleteCommentOnclick();
-            setEditCommentOnclick();
-        });
+            //If done correctly, set the comment section to the returned refresh
+            request.done(function(data, textStatus, jqXHR) {
+                $('#commentSection').html(data);
+                setDeleteCommentOnclick();
+                setEditCommentOnclick();
+            });
 
-        //Warn user if the refresh fails
-        request.fail(function(jqXHR, textStatus, errorThrown) {
-            alert("Failed to refresh comments.");
-        });
-
+            //Warn user if the refresh fails
+            request.fail(function(jqXHR, textStatus, errorThrown) {
+                alert("Failed to refresh comments.");
+            });
+        }
         return false; 
     }
 

@@ -43,13 +43,17 @@ function user_exist_check($username)
     }
 }
 
-function add_account_to_db($username, $password)
+//Adds a new account to the database, setting the username, password, and email
+//Return codes:     0 - Query failed
+//                  1 - Account successfully added
+//                  2 - User already exists
+function add_account_to_db($username, $password, $email)
 {
     $userExists = user_exist_check($username);
 
     if ($userExists > 1)
     {
-		die ("user_exist_check() failed. Could not query the database: <br />". mysqli_error());
+        return 0;
 	}	
     else
     {
@@ -58,20 +62,20 @@ function add_account_to_db($username, $password)
             //Hash the password before storing it so it is not in plaintext
 			$hash = password_hash($password, PASSWORD_DEFAULT);
 			
-            if($query = mysqli_prepare(db_connect_id(), "INSERT INTO account (username, password) VALUES (?, ?)"))
+            if($query = mysqli_prepare(db_connect_id(), "INSERT INTO account (username, password, email) VALUES (?, ?, ?)"))
             {
-                mysqli_stmt_bind_param($query, "ss", $username, $hash);
+                mysqli_stmt_bind_param($query, "sss", $username, $hash, $email);
                 $insert = mysqli_stmt_execute($query);
                 mysqli_stmt_close($query);
 
                 if($insert)
                     return 1; //New user correctly inserted
                 else
-				    die ("Could not insert into the database: <br />". mysqli_error( db_connect_id() ));
+                    return 0;
             }
             else
             {
-                die ("Could not insert into the database: <br />". mysqli_error( db_connect_id() ));
+                return 0;
             }
         }
         else
@@ -269,15 +273,16 @@ function remove_media($mediaid)
 }
 
 //Sets the metadata for the media item with the given mediaid to have the given title,
-//description, category, and keywords. The keywords should take the form of an array of
-//strings containing a single keyword each. Returns true on a successfull change, false
-//on an unsuccessful change.
-function update_media_metadata($mediaid, $title, $description, $category, $keywords)
+//description, category, keywords, and allow comments status. The keywords should take
+//the form of an array of strings containing a single keyword each. Returns true on a
+//successful change, false on an unsuccessful change.
+function update_media_metadata($mediaid, $title, $description, $category, $keywords, $allow_comments)
 {
     if($query = mysqli_prepare(db_connect_id(), "UPDATE media SET title=?, description=?,
-        category=? WHERE mediaid=?"))
+        category=?, allow_comments=? WHERE mediaid=?"))
     {
-        mysqli_stmt_bind_param($query, "sssi", $title, $description, $category, $mediaid);
+        mysqli_stmt_bind_param($query, "sssii", $title, $description, $category,
+            $allow_comments, $mediaid);
         $result = mysqli_stmt_execute($query);
         $matched = get_matched_rows(db_connect_id());
         mysqli_stmt_close($query);
