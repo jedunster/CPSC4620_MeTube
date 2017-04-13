@@ -70,7 +70,7 @@ if(isset($_GET['id']))
                         if($similarQuery = mysqli_prepare(db_connect_id(), "SELECT media.title, media.type, media.mediaid, 
                             media.upload_date, media.username FROM playlist_media INNER JOIN media ON 
                             playlist_media.mediaid=media.mediaid WHERE playlist_media.playlist_id=? AND media.mediaid!=? 
-                            ORDER BY media.upload_date DESC LIMIT 10"))
+                            ORDER BY media.upload_date DESC"))
                         {
                             mysqli_stmt_bind_param($similarQuery, "ii", $_REQUEST['playlistid'], $_GET['id']);
                             if(mysqli_stmt_execute($similarQuery))
@@ -99,7 +99,7 @@ if(isset($_GET['id']))
                                             default: echo substr($mediatype,0,5);
                                         }
 
-                                        echo "<a href='media.php?id=$simID'>$simTitle</a><br>";
+                                        echo "<a href='media.php?id=$simID&playlistid={$_REQUEST['playlistid']}'>$simTitle</a><br>";
                                         echo "From: <a href='account.php?username=$simUser'>$simUser</a><br>";
                                         echo "Uploaded: $simDate<br>";
                                         echo "</div>";
@@ -298,7 +298,7 @@ if(isset($_GET['id']))
         <?php
         echo "<div id='commentSection'>";
         include "comments.php"; 
-        echo "</div>";
+        echo "</div><br>";
         }
         else
         {

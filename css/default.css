@@ -184,6 +184,8 @@ h3.media-title{
 .similar-media-container{
     min-width:200px;
     max-width: 400px;
+    max-height: 765px;
+    overflow-y: auto;
     width: calc(100% - 864px);
     float: right;
     word-wrap: break-word;
