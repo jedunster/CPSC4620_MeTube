@@ -46,10 +46,10 @@ else
 		</label>
 		<span class="label label-info" id="upload-file-info">Choose a file </span>
 		<h4 style="margin-bottom:0px; margin-top: 20px;">Title</h4>
-		<input id="title" name="title" type="text" class="form-control" style="width: 550px;">
+		<input maxlength="40" id="title" name="title" type="text" class="form-control" style="width: 550px;">
 
 		<h4 style="margin-bottom:0px; margin-top: 20px;">Description</h4>
-  		<textarea id="description" name="description" class="form-control" rows="5" style="resize: none; width: 550px;"></textarea>
+  		<textarea id="description" name="description" class="form-control" rows="5" style="resize: none; width: 550px;" maxlength="998"></textarea>
 
 		<h4 style="margin-bottom:0px; margin-top: 20px;">Category</h4>
 		<select name="category"class="form-control" style="width: 175px;">
@@ -65,8 +65,7 @@ else
                 <input name="keywords" type="text" id="keywords" class="form-control" style="width: 550px;">
         
         <h4 style="margin-bottom:0px; margin-top: 20px;">Allow Comments?</h4>
-                <input name="allowComments" type="checkbox" id="allowComments" class="form-control" style="float: left; width: 20px; height: 20px;" value="1" checked>
-                <input name="allowComments" type="hidden" id="allowCommentsHidden" value="0">
+                <input name="allowComments" type="checkbox" id="allowComments" class="form-control" style="float: left; width: 20px; height: 20px;" value="checked" checked>
         <br><br>
 
 
