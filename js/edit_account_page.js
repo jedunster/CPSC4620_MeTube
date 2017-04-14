@@ -101,7 +101,6 @@ $(document).ready(function() {
                     $('#currentPasswordValidation').text('You must enter your current password.');
                     currPasswordValid = false;
                 }
-
                 else
                 {
                     $('#currentPasswordValidation').text('');

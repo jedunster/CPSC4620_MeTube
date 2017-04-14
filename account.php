@@ -15,14 +15,11 @@ if(isset($_GET['username'])) $_SESSION['prevpage'] = "account.php?username=".$_G
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Account</title>
-<script src="js/jquery-3.2.0.min.js"></script>
-<script src="js/account_page.js"></script>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<script src="js/jquery-3.2.0.min.js"></script>
+<script src="js/account_page.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="Scripts/AC_ActiveX.js" type="text/javascript"></script>
-<script src="Scripts/AC_RunActiveContent.js" type="text/javascript"></script>
-
 </head>
 
 <body>
@@ -80,7 +77,7 @@ if(isset($_GET['username']))
 					{
 						if($decodedUsername == $_SESSION['username'])
 						{
-							echo "Edit profile";
+							echo "Edit Profile";
 						}
 						else
 						{
@@ -165,7 +162,7 @@ if(isset($_GET['username']))
 						<h4>Uploads
 						<?php
 						if($_SESSION['username'] == $decodedUsername)
-							echo "<a href=\"media_upload.php\" class=\"btn btn-primary\" id=\"newupload\">New upload</a></h4>";
+							echo "<a href=\"media_upload.php\" class=\"btn btn-primary\" id=\"newupload\">New Upload</a></h4>";
 						else
 							echo "</h4>";
 
@@ -212,8 +209,30 @@ if(isset($_GET['username']))
                     <div class="row" style="height: 30.3vh; overflow-y: auto; margin-bottom: 10px; border-top: solid grey">
 						<h4>Playlists
 						<?php
-						if($_SESSION['username'] == $decodedUsername)
-							echo "<a href=\"addplaylist.php\" class=\"btn btn-primary\" id=\"newplaylist\">New playlist</a></h4>";
+                        if($_SESSION['username'] == $decodedUsername)
+                        {
+                            echo "<button data-toggle=\"modal\" data-target=\"#addPlaylistPopup\" class=\"btn btn-primary\" id=\"newplaylist\">Add Playlist</a></h4>";
+?>
+                            <div class='modal' id='addPlaylistPopup' role='dialog'>
+                                <div class='modal-dialog modal-sm'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <h4 class='modal-title'>Add Playlist</h4>
+                                        </div>
+                                        <div class='modal-body'>
+                                            <h5>Playlist Name:</h5>
+                                            <input type='text' maxlength='40' class='form-control' id='playlistName' name='playlistName'>
+                                            <h6 style='color:red' id='playlistNameValidation'></h6>
+                                        </div>
+                                        <div class='modal-footer'>
+                                            <button type='button' class='btn btn-primary' data-dismiss='modal' id='cancelAddPlaylist' naem='cancelAddPlaylist'>Cancel</button>
+                                            <button type='button' class='btn btn-primary' id='submitAddPlaylist' name='submitAddPlaylist'>Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+<?php
+                        }
 						else
 							echo "</h4>";
 
@@ -224,8 +243,8 @@ if(isset($_GET['username']))
 							$query->store_result();
 							mysqli_stmt_bind_result($query, $listname, $listid);
 							while(mysqli_stmt_fetch($query))
-							{
-								echo "<div style=\"float: left; margin-bottom: 10px\">";
+                            {
+								echo "<div style=\"float: left; margin-bottom: 10px; width: 100%\">";
 								echo "<a href=\"playlist.php?id=".$listid."\" style=\"font-size: 16px\">".$listname."</a><br/>";
 								if($query1 = mysqli_prepare(db_connect_id(), "SELECT title, username, media.mediaid, upload_date, type, category FROM playlist_media LEFT JOIN media ON playlist_media.mediaid = media.mediaid WHERE playlist_id = ? ORDER BY upload_date DESC"))	
 								{

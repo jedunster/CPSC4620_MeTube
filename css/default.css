@@ -71,6 +71,11 @@
     color: red;
 }
 
+.header-container {
+    padding: 10px 20px 0px 20px;
+    min-width: 1200px;
+}
+
 .header-btn {
     float: right;
     margin-left: 5px
@@ -402,4 +407,91 @@ h3.media-title{
 	font-size: 14px;
 	word-wrap: break-word;
 	white-space: nowrap;
+}
+
+h3.playlist-title{
+    padding: 0px 0px 0px 5px;
+    margin: 0px;
+    border: 0px;
+}
+
+.playlist-details-container{
+    width: 700px;
+    margin: 0px auto;
+    border-width: 1px;
+    border-style: solid;
+    border-color: grey;
+}
+
+
+.playlist-description-value{
+    padding: 0px 5px 0px 25px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    word-wrap: break-word;
+}
+
+.playlist-description-value:first-letter{
+    margin-left: -20px;
+}
+
+.btn-edit-playlist{
+    padding: 5px;
+    float:right;
+    cursor: pointer;
+    color: black;
+}
+
+.btn-edit-playlist:hover{
+    cursor: hand;
+    background-color: #dddddd;
+}
+
+.btn-delete-playlist{
+    padding: 5px;
+    float:right;
+    cursor: pointer;
+}
+
+.btn-delete-playlist:hover{
+    cursor: hand;
+    background-color: #dddddd;
+}
+
+.playlist-media-container{
+    width: 400px;
+    margin: 0px auto;
+    word-wrap: break-word;
+    text-align:center;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: grey;
+}
+
+.playlist-media-details-container{
+	width: calc(100% - 10px);
+    margin: 0px auto 5px auto;
+	border: 1px solid grey;
+	white-space: nowrap;
+	overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+	padding: 3px;
+}
+
+.btn-delete-playlist-media{
+    padding: 5px;
+    float:right;
+    cursor: pointer;
+}
+
+.btn-delete-playlist-media:hover{
+    cursor: hand;
+    background-color: #dddddd;
+}
+
+.edit-playlist-validation {
+    padding: 5px 0px 0px 0px;
+    font-size: 13px;
+    color: red;
 }

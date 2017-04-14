@@ -41,7 +41,7 @@ else
 	<label class="btn btn-primary btn-file">
 				
     			Browse 
-		 <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+		<input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
 		<input name="file" id="fileInput" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
 		</label>
 		<span class="label label-info" id="upload-file-info">Choose a file </span>
@@ -65,8 +65,8 @@ else
                 <input name="keywords" type="text" id="keywords" class="form-control" style="width: 550px;">
         
         <h4 style="margin-bottom:0px; margin-top: 20px;">Allow Comments?</h4>
-                <input name="allowComments" type="checkbox" id="allowComments" class="form-control" style="float: left; width: 20px; height: 20px;" value="1" checked>
                 <input name="allowComments" type="hidden" id="allowCommentsHidden" value="0">
+                <input name="allowComments" type="checkbox" id="allowComments" class="form-control" style="float: left; width: 20px; height: 20px;" value="1" checked>
         <br><br>
 
 

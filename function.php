@@ -27,7 +27,7 @@ function user_exist_check($username)
     if($query = mysqli_prepare(db_connect_id(), "SELECT username FROM account WHERE username=?"))
     {
         mysqli_stmt_bind_param($query, "s", $username);
-        if(!mysqli_stmt_execute($query)) return 2; //Query failed
+        if(!mysqli_stmt_execute($query)) return 3; //Query failed
         mysqli_stmt_bind_result($query, $fetchedUsername);
         $exists = mysqli_stmt_fetch($query);
         mysqli_stmt_close($query);
@@ -574,7 +574,7 @@ function remove_favorited_media($username, $mediaid)
 }
 
 //Creates a playlist with the given name under the user with the given
-//username. Returns true on success, false on failure.
+//username. Returns the new playlist's id on success, false on failure.
 function create_playlist($username, $playlist_name)
 {
     if($query = mysqli_prepare(db_connect_id(), "INSERT INTO playlist

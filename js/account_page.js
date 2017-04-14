@@ -1,3 +1,9 @@
+/* File to hold javascript for dynamic events on the account viewing
+ * page, including sending AJAX requests.
+ */
+
+var playlistNameValid = false;
+
 $(document).ready(function() {
 
 	$('#editsub').click(function() {
@@ -206,4 +212,68 @@ $(document).ready(function() {
             });
         });
     }
+
+    //Code to clear input when canceling adding a playlist
+    if($('#cancelAddPlaylist').length)
+    {
+        $('#cancelAddPlaylist').click(function(){
+            $('#playlistName').val('');
+            $('#playlistNameValidation').text('');
+            playlistNameValid = false;
+        });
+    }
+
+    //Code to validate playlist name
+    if($('#playlistName').length)
+    {
+        $('#playlistName').on('change', function(){
+            if($(this).val().length == 0)
+            {
+                $('#playlistNameValidation').text('Playlist must have a name.');
+                playlistNameValid = false;
+            }
+            else if($(this).val().length > 40)
+            {
+                $('#playlistNameValidation').text('Playlist name cannot exceed 40 characters.');
+                playlistNameValid = false;
+            }
+            else
+            {
+                $('#playlistNameValidation').text('');
+                playlistNameValid = true;
+            }
+        });
+    }
+
+    //Code to submit new playlist
+    if($('#submitAddPlaylist').length)
+    {
+        $('#submitAddPlaylist').click(function(){
+            if(playlistNameValid)
+            {
+                var playlistName = $('#playlistName').val();
+                var button = $(this);
+
+                request = $.ajax({
+                    url: "playlistViewAjax.php",
+                    type: "POST",
+                    data: {'action': 1, 'playlistName': playlistName}
+                });
+
+                //If delete succeeds, refresh comments
+                request.done(function(data, textStatus, jqXHR) {
+                    if(data === "success")
+                        window.location.reload();
+                    else
+                        $('#playlistNameValidation').text('Failed to add playlist.');
+                });
+
+                //Warn user if the delete fails
+                request.fail(function(jqXHR, textStatus, errorThrown) {
+                    $('#playlistNameValidation').text('Failed to add playlist.');
+                });
+            }
+        });
+    }
+
 });

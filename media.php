@@ -11,7 +11,7 @@
 <head>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Media</title>
+<title>Media View</title>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 <script src="js/jquery-3.2.0.min.js"></script>
@@ -78,7 +78,7 @@ if(isset($_GET['id']))
                                 mysqli_stmt_bind_result($similarQuery, $simTitle, $simType, $simID, $simDate, $simUser);
                                 if(!mysqli_stmt_fetch($similarQuery))
                                 {
-                                    echo "<h6>No other media in same playlist..</h6>";
+                                    echo "<h6>No other media in same playlist.</h6>";
                                 }
                                 else
                                 {    
@@ -96,7 +96,7 @@ if(isset($_GET['id']))
                                             case "image":
                                                 echo "<span class=\"glyphicon glyphicon-picture\"></span> ";
                                                 break;
-                                            default: echo substr($mediatype,0,5);
+                                            default: echo substr($simType,0,5);
                                         }
 
                                         echo "<a href='media.php?id=$simID&playlistid={$_REQUEST['playlistid']}'>$simTitle</a><br>";
@@ -112,7 +112,7 @@ if(isset($_GET['id']))
                         }
                         else
                         {
-                            echo "<h6>No other media in same playlist.</h6>".mysqli_error(db_connect_id());
+                            echo "<h6>No other media in same playlist.</h6>";
                         }
 
                     }

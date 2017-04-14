@@ -6,7 +6,7 @@
     }
 ?>
 
-<div id="headerContainer" class="container-fluid" style="padding: 10px 20px 0px 20px">
+<div id="headerContainer" class="container-fluid header-container">
     <div class="row">
         <div id="logoContainer" class="col-md-1">
             <a href="index.php"><img src="images/logo.png"/></a>
