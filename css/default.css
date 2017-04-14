@@ -406,7 +406,7 @@ h3.media-title{
 .inbox-message{
 	font-size: 14px;
 	word-wrap: break-word;
-	white-space: nowrap;
+	white-space: pre-wrap;
 }
 
 h3.playlist-title{

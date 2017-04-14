@@ -65,7 +65,12 @@ else
                 <input name="keywords" type="text" id="keywords" class="form-control" style="width: 550px;">
         
         <h4 style="margin-bottom:0px; margin-top: 20px;">Allow Comments?</h4>
+<<<<<<< HEAD
+                <input name="allowComments" type="hidden" id="allowCommentsHidden" value="0">
+                <input name="allowComments" type="checkbox" id="allowComments" class="form-control" style="float: left; width: 20px; height: 20px;" value="1" checked>
+=======
                 <input name="allowComments" type="checkbox" id="allowComments" class="form-control" style="float: left; width: 20px; height: 20px;" value="checked" checked>
+>>>>>>> 82429c188c93ddf405491b25bab9f1c87537711b
         <br><br>
 
 

@@ -50,7 +50,8 @@ else
                 $title = $_POST["title"];
 		        $description = $_POST["description"];
 		        $category = $_POST["category"];
-		        $allowcomments = $_POST["allowComments"];
+		        if(isset($_POST["allowComments"]) && $_POST["allowComments"] == "checked")$allowcomments = 1;
+			else $allowcomments = 0;
                 mysqli_stmt_bind_param($query, "sssssissi", $title, $username,
                     $_FILES['file']['type'],$dirfile, $pathinfo['extension'],
                     $_FILES['file']['size'], $description, $category, $allowcomments);
