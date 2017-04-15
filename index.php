@@ -14,8 +14,10 @@
 <title>Media Browse</title>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<script type="text/javascript" src="js/jquery-latest.pack.js"></script>
+<script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
+
 function saveDownload(id)
 {
 	$.post("media_download_process.php",
@@ -34,14 +36,14 @@ function saveDownload(id)
 ?>
 <div id='bodyContent' class='body-content'>
 <a href='media_upload.php'  style="color:#FF9900;">Upload File</a>
-<div id='upload_result'>
+
 <?php 
-	if(isset($_REQUEST['result']) && $_REQUEST['result']!=0)
+	if(isset($_REQUEST['result']))
 	{		
-		echo upload_error($_REQUEST['result']);
+		echo "<div style=\"position:absolute; top:0px;width:100%;\" class=\"alert alert-danger alert dismissable\">","<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>",($_REQUEST['result']),"</strong></div>";
 	}
 ?>
-</div>
+
 <br/><br/>
 <?php
 
