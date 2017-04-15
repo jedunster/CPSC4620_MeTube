@@ -25,7 +25,7 @@ if(!isset($_SESSION['username'])
         <link rel="stylesheet" type="text/css" href="css/default.css">
         <script src="js/jquery-3.2.0.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-	
+	<script type="text/javascript" src="js/editmedia.js"></script>	
 <title>Edit Media</title>
 </head>
 <body>
