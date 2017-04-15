@@ -32,17 +32,36 @@ function saveDownload(id)
 <?php
     include 'header.php';
 ?>
-<div id='bodyContent' class='body-content'>
-<a href='media_upload.php'  style="color:#FF9900;">Upload File</a>
-<div id='upload_result'>
-<?php 
-	if(isset($_REQUEST['result']) && $_REQUEST['result']!=0)
-	{		
-		echo upload_error($_REQUEST['result']);
-	}
-?>
+<div class="browse-sidenav-container">
+    <h3 style="text-align: center">Browse Media</h3>
+    <div id="homeTabButton" class='browse-sidenav-button active'>
+        Home
+        <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
+    </div>
+    <div id="funnyCategoryButton" class='browse-sidenav-button'>
+        Funny Category
+        <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
+    </div>
+    <div id="musicCategoryButton" class='browse-sidenav-button'>
+        Music Category
+        <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
+    </div>
+    <div id="sportsCategoryButton" class='browse-sidenav-button'>
+        Sports Category
+        <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
+    </div>
+    <div id="informativeCategoryButton" class='browse-sidenav-button'>
+        Informative Category
+        <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
+    </div>
+    <div id="otherCategoryTabButton" class='browse-sidenav-button bottom'>
+        Other Category
+        <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
+    </div>
 </div>
-<br/><br/>
+
+
+<div id='bodyContent' class='browse-body-content'>
 <?php
 
 	$query = "SELECT * from media"; 

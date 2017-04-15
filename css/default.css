@@ -495,3 +495,58 @@ h3.playlist-title{
     font-size: 13px;
     color: red;
 }
+
+.browse-body-content{
+    width: 80%;
+    min-width: 1200px;
+    padding: 0px 20px 0px 320px;
+    margin: 0px auto;
+}
+.browse-sidenav-container{
+    height: 350px;
+    float: left;
+    min-width: 300px;
+    border-width: 2px 2px 2px 0px;
+    border-color: grey;
+    border-style: solid;
+    border-radius: 0px 10px 10px 0px;
+    padding: 0px;
+}
+
+.browse-sidenav-button{
+    margin:0px;
+    height: 40px;
+    line-height: 40px;
+    border-width: 2px 0px 0px 0px;
+    border-color:grey;
+    border-style:solid;
+    text-align:center;
+    width: 100%;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+.browse-sidenav-button:hover{
+    background-color: #dddddd;
+    cursor: hand;
+}
+
+.browse-sidenav-button.bottom{
+    border-width: 2px 0px 2px 0px;
+}
+
+.browse-sidenav-button.active{
+    background-color: #bbbbbb;
+    cursor: pointer;
+}
+
+.browse-sidenav-button.active:hover{
+    cursor: pointer;
+}
+
+.browse-sidenav-icon{
+    float: right;
+    line-height: 40px;
+    padding: 9px 5px 0px 5px;
+}
+
