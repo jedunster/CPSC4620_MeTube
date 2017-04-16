@@ -502,6 +502,7 @@ h3.playlist-title{
     padding: 0px 20px 0px 320px;
     margin: 0px auto;
 }
+
 .browse-sidenav-container{
     height: 350px;
     float: left;
@@ -571,3 +572,10 @@ h3.playlist-title{
     border-radius: 10px;
     overflow: auto;
 }
+
+.search-body-content{
+    width: 65%;
+    min-width: 1200px;
+    margin: 0px auto;
+}
+
