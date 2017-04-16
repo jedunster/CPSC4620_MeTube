@@ -22,7 +22,6 @@ $(document).ready(function() {
                 $('.browse-sidenav-button.active').removeClass('active');
                 button.addClass('active');
                 $('#bodyContent').html(data);
-                setFormEvents();
             });
            
             //Page is not loaded successfully
@@ -50,7 +49,6 @@ $(document).ready(function() {
                 $('.browse-sidenav-button.active').removeClass('active');
                 button.addClass('active');
                 $('#bodyContent').html(data);
-                setFormEvents();
             });
            
             //Page is not loaded successfully

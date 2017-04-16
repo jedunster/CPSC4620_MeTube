@@ -3,7 +3,7 @@ $(document).ready(function(){
 	/* sets reply buttons to add recipient name to messaging area and
 	 * sets typing foucs to the message box
 	 */
-	$('#reply').click(function(){
+	$('.btn-reply').click(function(){
 		var sender = $(this).val();
 
 		$('#recipients').val(sender);
@@ -21,6 +21,21 @@ $(document).ready(function(){
 		$('#messageerror').text("");
 	});
 
+
+    function refreshSentMessages() {
+        request = $.ajax({
+			url: "messagessent.php",
+			type: "POST"
+		});
+		
+        request.done(function(data, textStatus, jqXHR){
+            $('#sentMessagesContainer').html(data);
+        });
+
+        request.fail(function(jqXHR, textStatus, errorThrown){
+			alert("Failed to refresh sent messages.");
+		});
+    }
 
 	/* Sends an ajax request to try to send the message to the given recipients
 	 * upon clicking the send button
@@ -42,6 +57,7 @@ $(document).ready(function(){
 				$('#messagecontents').val("");
 				$('#messageerror').text("");
 				$('#messagesuccess').text("Message sent successfully");
+                refreshSentMessages();
 			}
 			else if(data == "empty")
 			{
