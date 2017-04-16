@@ -38,7 +38,7 @@ else
         	
         	<h3>Upload a File:</h3>
 		
-	<label class="btn btn-primary btn-file">
+	<label class="btn btn-primary btn-file" for="fileInput">
 				
     			Browse 
 		<input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
