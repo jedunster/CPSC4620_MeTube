@@ -27,6 +27,7 @@
 
 if(isset($_GET['id']))
 {
+	$_SESSION['prevpage'] = "media.php?id=".$_GET['id'];
     echo "<div id='bodyContent' class='body-content'>";
     //Get the media's information from the database
     if($query = mysqli_prepare(db_connect_id(), "SELECT username, title, type, path, upload_date, description,
