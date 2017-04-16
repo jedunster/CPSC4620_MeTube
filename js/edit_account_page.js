@@ -264,7 +264,7 @@ $(document).ready(function() {
            
             //Page is not loaded successfully
             request.fail(function(jqXHR, textStatus, errorThrown) {
-                    alert("Failed to load password update form..");
+                    alert("Failed to load password update form.");
             });
         }
     });

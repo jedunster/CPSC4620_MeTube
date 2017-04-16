@@ -497,7 +497,7 @@ h3.playlist-title{
 }
 
 .browse-body-content{
-    width: 80%;
+    width: 90%;
     min-width: 1200px;
     padding: 0px 20px 0px 320px;
     margin: 0px auto;
@@ -549,4 +549,25 @@ h3.playlist-title{
     line-height: 40px;
     padding: 9px 5px 0px 5px;
 }
+.browse-media-details-container{
+	width: 13.8vw;
+	border-width: 1px 1px 1px 1px;
+	border-style: solid;
+	border-color: grey;
+	float: left;
+	white-space: nowrap;
+	overflow: hidden;
+    text-overflow: ellipsis;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	padding: 3px 3px;
+}
 
+.browse-media-items-container {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px 0px 0px 5px;
+    border: 1px solid grey;
+    border-radius: 10px;
+    overflow: auto;
+}

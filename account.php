@@ -277,8 +277,8 @@ if(isset($_GET['username']))
 											default: echo substr($mediatype,0,5);
 										}
 										echo "<a href=\"media.php?id=".$mediaid."&playlistid=".$listid."\">".$mediatitle."</a><br/>";
+                                        echo "Uploader: <a href='account.php?username=".urlencode($mediauser)."'>$mediauser</a><br>";
 										echo "Uploaded: ".$mediadate."<br/>";
-										echo "By: ".$mediauser."<br/>";
 										echo "Category: ".$mediacat; if($mediacat == NULL) echo "None";
 										echo "</div>";
 									}
@@ -328,8 +328,8 @@ if(isset($_GET['username']))
 									default: echo substr($mediatype,0,5);
 								}
 								echo "<a href=\"media.php?id=".$mediaid."\">".$mediatitle."</a><br/>";
+                                echo "Uploader: <a href='account.php?username=".urlencode($mediauser)."'>$mediauser</a><br>";
 								echo "Uploaded: ".$mediadate."<br/>";
-								echo "By: ".$mediauser."<br/>";
 								echo "Category: ".$mediacat; if($mediacat == NULL) echo "None";
 								echo "</div>";
 							}

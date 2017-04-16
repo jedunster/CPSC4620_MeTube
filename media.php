@@ -100,7 +100,7 @@ if(isset($_GET['id']))
                                         }
 
                                         echo "<a href='media.php?id=$simID&playlistid={$_REQUEST['playlistid']}'>$simTitle</a><br>";
-                                        echo "From: <a href='account.php?username=$simUser'>$simUser</a><br>";
+                                        echo "From: <a href='account.php?username=".urlencode($simUser)."'>$simUser</a><br>";
                                         echo "Uploaded: $simDate<br>";
                                         echo "</div>";
                                     } while(mysqli_stmt_fetch($similarQuery));
@@ -161,7 +161,7 @@ if(isset($_GET['id']))
                                 }
 
                                 echo "<a href='media.php?id=$simID'>$simTitle</a><br>";
-                                echo "From: <a href='account.php?username=$simUser'>$simUser</a><br>";
+                                echo "From: <a href='account.php?username=".urlencode($simUser)."'>$simUser</a><br>";
                                 echo "Uploaded: $simDate<br>";
                                 echo "</div>";
                             } while(mysqli_stmt_fetch($similarQuery));

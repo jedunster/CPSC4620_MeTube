@@ -14,8 +14,11 @@
 <title>Media Browse</title>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<script type="text/javascript" src="js/jquery-latest.pack.js"></script>
+<script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/browse_page.js"></script>
 <script type="text/javascript">
+
 function saveDownload(id)
 {
 	$.post("media_download_process.php",
@@ -34,27 +37,32 @@ function saveDownload(id)
 ?>
 <div class="browse-sidenav-container">
     <h3 style="text-align: center">Browse Media</h3>
-    <div id="homeTabButton" class='browse-sidenav-button active'>
+    <div id="homeTabButton" class='browse-sidenav-button home active'>
         Home
         <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
     </div>
-    <div id="funnyCategoryButton" class='browse-sidenav-button'>
+    <div id="funnyCategoryButton" class='browse-sidenav-button category'>
+        <input type="hidden" name="categoryName" value="Funny">
         Funny Category
         <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
     </div>
-    <div id="musicCategoryButton" class='browse-sidenav-button'>
+    <div id="musicCategoryButton" class='browse-sidenav-button category'>
+        <input type="hidden" name="categoryName" value="Music">
         Music Category
         <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
     </div>
-    <div id="sportsCategoryButton" class='browse-sidenav-button'>
+    <div id="sportsCategoryButton" class='browse-sidenav-button category'>
+        <input type="hidden" name="categoryName" value="Sports">
         Sports Category
         <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
     </div>
-    <div id="informativeCategoryButton" class='browse-sidenav-button'>
+    <div id="informativeCategoryButton" class='browse-sidenav-button category'>
+        <input type="hidden" name="categoryName" value="Informative">
         Informative Category
         <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
     </div>
-    <div id="otherCategoryTabButton" class='browse-sidenav-button bottom'>
+    <div id="otherCategoryTabButton" class='browse-sidenav-button category bottom'>
+        <input type="hidden" name="categoryName" value="Other">
         Other Category
         <span class='glyphicon glyphicon-menu-right browse-sidenav-icon'></span>
     </div>
@@ -62,42 +70,9 @@ function saveDownload(id)
 
 
 <div id='bodyContent' class='browse-body-content'>
-<?php
-
-	$query = "SELECT * from media"; 
-	$result = mysqli_query( db_connect_id(), $query );
-	if (!$result){
-	   die ("Could not query the media table in the database: <br />". mysqli_error( db_connect_id() ));
-	}
+<?php 
+    include 'browsehome.php';
 ?>
-    
-    <div style="background:#339900;color:#FFFFFF; width:150px;">Uploaded Media</div>
-	<table width="50%" cellpadding="0" cellspacing="0">
-		<?php
-			while ($result_row = mysqli_fetch_row($result)) //filename, username, type, mediaid, path
-			{ 
-				$mediaid = $result_row[3];
-				$filename = $result_row[0];
-				$filenpath = $result_row[4];
-		?>
-        	 <tr valign="top">			
-			<td>
-					<?php 
-						echo $mediaid;  //mediaid
-					?>
-			</td>
-                        <td>
-            	            <a href="media.php?id=<?php echo $mediaid;?>" target="_blank"><?php echo $filename;?></a> 
-                        </td>
-                        <td>
-            	            <a href="<?php echo $filenpath;?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[3];?>);">Download</a>
-                        </td>
-		</tr>
-        	<?php
-			}
-		?>
-	</table>
-   </div>
 </div>
 </body>
 </html>

@@ -1,6 +1,116 @@
 <?php
 include "mysqlClass.inc.php";
 
+
+//return username with from media with id
+function getUsernameFromMedia($id){
+	 if($query = mysqli_prepare(db_connect_id(), "SELECT username FROM media WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $id);
+        if(!mysqli_stmt_execute($query)) return null; //Query failed
+        mysqli_stmt_bind_result($query, $fetchedUsername);
+        $exists = mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
+
+        if($exists)
+            return $fetchedUsername; 
+        else
+            return null; 
+    }
+    else
+    {
+        return null; //Could not connect
+    }
+	return null;
+}
+
+//return Title from Media with id
+function getTitleFromMedia($id){
+         if($query = mysqli_prepare(db_connect_id(), "SELECT title FROM media WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $id);
+        if(!mysqli_stmt_execute($query)) return null; //Query failed
+        mysqli_stmt_bind_result($query, $title);
+        $exists = mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
+
+        if($exists)
+            return $title; //User exists
+        else
+            return null; //User does not exist
+    }
+    else
+    {
+        return null; //Could not connect
+    }
+        return null;
+}
+
+function getDescriptionFromMedia($id){
+         if($query = mysqli_prepare(db_connect_id(), "SELECT description FROM media WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $id);
+        if(!mysqli_stmt_execute($query)) return null; //Query failed
+        mysqli_stmt_bind_result($query, $fetchedDescription);
+        $exists = mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
+
+        if($exists)
+            return $fetchedDescription; 
+        else
+            return null; 
+    }
+    else
+    {
+        return null; //Could not connect
+    }
+        return null;
+}
+
+//returns category of media
+function getCategoryFromMedia($id){
+         if($query = mysqli_prepare(db_connect_id(), "SELECT category FROM media WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $id);
+        if(!mysqli_stmt_execute($query)) return null; //Query failed
+        mysqli_stmt_bind_result($query, $fetchedCat);
+        $exists = mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
+
+        if($exists)
+            return $fetchedCat; 
+        else
+            return null; 
+    }
+    else
+    {
+        return null; //Could not connect
+    }
+        return null;
+}
+
+//return whether comments are allowed or not
+function getAllowedCommentsFromMedia($id){
+         if($query = mysqli_prepare(db_connect_id(), "SELECT allow_comments FROM media WHERE mediaid=?"))
+    {
+        mysqli_stmt_bind_param($query, "i", $id);
+        if(!mysqli_stmt_execute($query)) return false; //Query failed
+        mysqli_stmt_bind_result($query, $comments);
+        $exists = mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
+
+        if($exists)
+            return $comments == 1; 
+        else
+            return false; 
+    }
+    else
+    {
+        return false; 
+    }
+        return false;
+}
+
 //Takes a set of keywords as a space-separated string and returns an
 //array of those keywords such that each element is a keyword and all
 //keywords are lowercase
@@ -16,6 +126,9 @@ function get_matched_rows($link)
 {
     return preg_match("!\d+!", mysqli_info($link));
 }
+
+
+
 
 // Check if the given username exists in the database.
 // Return codes:    0 - User does not exist

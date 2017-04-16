@@ -25,7 +25,7 @@ chmod($dirfile,0755);
 
 if($_FILES["file"]["error"] > 0 )
 {
-    $result=$_FILES["file"]["error"]; //error from 1-4
+    $result="File error ".$_FILES["file"]["error"]; //error from 1-4
 }
 else
 {
@@ -36,7 +36,7 @@ else
     {
         if(!move_uploaded_file($_FILES['file']['tmp_name'],$upfile))
         {
-            $result="6"; //Failed to move file from temporary directory
+            $result="Failed to move file from temporary directory"; //Failed to move file from temporary directory
         }
         else /*Successfully upload file*/
         {
@@ -81,11 +81,11 @@ else
     else  
     {
 	
-        $result= "7"; 
+        $result= "File Error"; 
     }
 }
 
 //You can process the error code of the $result here.
 ?>
 
-<meta http-equiv="refresh" content="0;url=index.php?result=<?php echo $result;?>">
+<meta http-equiv="refresh" content="0;url=index.php?result=<?php if($result != "0") echo $result;?>">
