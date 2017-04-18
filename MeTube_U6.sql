@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: mysql1.cs.clemson.edu
--- Generation Time: Apr 12, 2017 at 02:46 PM
+-- Generation Time: Apr 18, 2017 at 11:25 AM
 -- Server version: 5.5.52-0ubuntu0.12.04.1
 -- PHP Version: 5.5.9-1ubuntu4.21
 
@@ -31,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `account` (
   `username` varchar(30) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `avatar_path` varchar(100) DEFAULT NULL,
   `summary` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -52,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   PRIMARY KEY (`comment_id`),
   KEY `comment_ibfk_1` (`username`),
   KEY `comment_ibfk_2` (`mediaid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=62 ;
 
 -- --------------------------------------------------------
 
@@ -70,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `download` (
   PRIMARY KEY (`download_id`),
   KEY `download_ibfk_1` (`username`),
   KEY `download_ibfk_2` (`mediaid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=53 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=56 ;
 
 -- --------------------------------------------------------
 
@@ -106,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `media` (
   `allow_comments` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`mediaid`),
   KEY `media_ibfk_1` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=39 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=82 ;
 
 -- --------------------------------------------------------
 
@@ -135,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   `message_contents` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`message_id`),
   KEY `message_ibfk_1` (`sender_username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1282 ;
 
 -- --------------------------------------------------------
 
@@ -166,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `playlist` (
   `description` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`playlist_id`),
   KEY `playlist_ibfk_1` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 -- --------------------------------------------------------
 
