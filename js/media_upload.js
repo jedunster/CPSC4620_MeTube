@@ -9,9 +9,9 @@ $(document).ready(function(){
 			if(file){
 				if(keywords){
 					upload = document.getElementById('fileInput');
-					if(upload && upload.files && upload.files[0] && upload.files[0].size < 10485760) //SIZE HERE 
+					if(upload && upload.files && upload.files[0] && upload.files[0].size < 52428800) //SIZE HERE 
 						return true;
-					else alert("File is too large, or your browser is out of date.");
+					else alert("File is too large (50 MiB max), or your browser is out of date.");
 				}else{alert("Keywords should contain only a-z and be separated by spaces.");}
 			}else{alert("Select a file of supported file type for upload.");}
 		}else{alert("You must have a title.");}
