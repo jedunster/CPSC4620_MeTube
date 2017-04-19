@@ -36,12 +36,12 @@ else
 		
    		
         	
-        	<h3>Upload a File:</h3>
+        	<h3>Upload a File (50 MiB max):</h3>
 		
 	<label class="btn btn-primary btn-file" for="fileInput">
 				
     			Browse 
-		<input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+		<input type="hidden" name="MAX_FILE_SIZE" value="52428800" />
 		<input name="file" id="fileInput" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
 		</label>
 		<span class="label label-info" id="upload-file-info">Choose a file </span>

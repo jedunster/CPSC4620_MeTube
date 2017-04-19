@@ -15,9 +15,9 @@
         <div class="col-md-2">
         </div>
         
-        <form id="searchForm">
+        <form id="searchForm" method="GET" action="search.php">
             <div class="col-md-4" style="padding-top: 8px">
-                    <input type="text" id="searchInput" class="form-control pull-right" placeholder="Search">
+                    <input type="text" id="query" name="query" class="form-control pull-right" placeholder="Search">
             </div>
             <div class="col-md-1" style="padding-top: 7px">
                     <input type="submit" id="searchSubmit" class="btn btn-primary pull-left" value="Submit">
