@@ -11,7 +11,7 @@ include_once "function.php";
 <head>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Media View</title>
+<title>Search Results</title>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 <script src="js/jquery-3.2.0.min.js"></script>
