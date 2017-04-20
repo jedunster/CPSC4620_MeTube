@@ -29,7 +29,16 @@ if(isset($_GET['username'])) $_SESSION['prevpage'] = "account.php?username=".$_G
 if(isset($_GET['username']))
 {
     $passedUsername = $_GET['username'];
-    $decodedUsername = urldecode($passedUsername);
+	$decodedUsername = urldecode($passedUsername);
+	if($query = mysqli_prepare(db_connect_id(), "SELECT username FROM account WHERE username = ?"))
+	{
+		mysqli_stmt_bind_param($query, "s", $decodedUsername);
+		$result = mysqli_stmt_execute($query);
+		mysqli_stmt_bind_result($query, $casecorrectedusername);
+		$result = mysqli_stmt_fetch($query);
+		mysqli_stmt_close($query);
+	}
+	$decodedUsername = $casecorrectedusername;
     if(user_exist_check($decodedUsername) != 1)
     {
         ?>
