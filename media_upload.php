@@ -75,7 +75,7 @@ else
                 
 	</form>
 
-<h5 style="margin-top: 20px">Supports File Formats:<br> .ico .cur .wav .mp3 .mp4 .webm .ogg .gif .png .jpg .jpeg .svg .bmp</h5>
+<h5 style="margin-top: 20px">Supports File Formats:<br> .ico .wav .mp3 .mp4 .webm .ogg .gif .png .jpg .jpeg .bmp</h5>
 </div>
 </body>
 </html>

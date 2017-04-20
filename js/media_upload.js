@@ -22,7 +22,7 @@ $(document).ready(function(){
 		if($(this).val() !== ""){
 			var ext = $('#fileInput').val().split('.').pop().toLowerCase();
 			if($.inArray(ext, 
-			    ['ico','cur','wav','mp3','mp4','webm','ogg','gif','png','jpg','jpeg','svg','bmp']) == -1) {
+			    ['ico','wav','mp3','mp4','webm','ogg','gif','png','jpg','jpeg','bmp']) == -1) {
 				file=false;
 			}else file=true;
 		}else file = false;
