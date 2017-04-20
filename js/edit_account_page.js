@@ -182,6 +182,9 @@ $(document).ready(function() {
             //is entered and let the user know the result.
             $('#updatePasswordForm').submit(function(){
                 $("#updatePasswordValidation").text('');
+                $("#currentPassword").change();
+                $("#newPassword1").change();
+                $("#newPassword2").change();
                 if(currPasswordValid && newPasswordValid)
                 {
                     var serializedForm = $(this).serialize() + "&action=1";

@@ -165,6 +165,10 @@ $(document).ready(function() {
     //On submit, register the user and link them to
     //the login page if the registration succeeds
     $('#registrationForm').submit(function() {
+        $('#username').change();
+        $('#email').change();
+        $('#password1').change();
+        $('#password2').change();
         if(usernameValid && emailValid && passwordValid)
         {
             var serializedForm = $(this).serialize() + "&action=2";

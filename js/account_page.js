@@ -249,6 +249,7 @@ $(document).ready(function() {
     if($('#submitAddPlaylist').length)
     {
         $('#submitAddPlaylist').click(function(){
+            $('#playlistName').change();
             if(playlistNameValid)
             {
                 var playlistName = $('#playlistName').val();
