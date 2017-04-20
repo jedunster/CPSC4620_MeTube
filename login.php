@@ -19,33 +19,36 @@ if(isset($_POST['submit'])) {
 				$login_error = "Incorrect username or password.";
 			}
 			else if($check==0){
-				if($query = mysqli_prepare(db_connect_id(), "SELECT username FROM media WHERE username=?"))
-    				{
-        				mysqli_stmt_bind_param($query, "s", $_POST['username']);
+				if($query = mysqli_prepare(db_connect_id(), "SELECT username FROM account WHERE username=?"))
+    			{
+        			mysqli_stmt_bind_param($query, "s", $_POST['username']);
         			if(mysqli_stmt_execute($query)){ //Query failed
-        			mysqli_stmt_bind_result($query, $fetchedUsername);
-        			$exists = mysqli_stmt_fetch($query);
-       				 mysqli_stmt_close($query);
+        			    mysqli_stmt_bind_result($query, $fetchedUsername);
+        			    $exists = mysqli_stmt_fetch($query);
+       				    mysqli_stmt_close($query);
 
-        			if($exists){
-            				$_SESSION['username'] = $fetchedUsername;
-				}
-				}
-    				}
-    				else
-    				{
-        				; //Could not connect
-    				}
+                        if($exists){
+                            $_SESSION['username'] = $fetchedUsername;
+                            if(isset($_SESSION['prevpage']) && $_SESSION['prevpage'] != "")
+                            {
+                                $returnto = $_SESSION['prevpage'];
+                                $_SESSION['prevpage'] = "";
+                                header('Location: '.$returnto);
+                            }
+                            else
+                                header('Location: index.php');
+                        }
+                        else
+                            $login_error = "Could not retrieve account.";
+				    }
+    			}
+                else
+                {
+                    $login_error = "Could not retrieve account."; //Could not connect
+                }
 
 				
-				if(isset($_SESSION['prevpage']) && $_SESSION['prevpage'] != "")
-				{
-					$returnto = $_SESSION['prevpage'];
-					$_SESSION['prevpage'] = "";
-					header('Location: '.$returnto);
-				}
-				else
-					header('Location: index.php');
+
 			}		
 		}
 }
