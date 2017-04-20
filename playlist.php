@@ -25,6 +25,7 @@
 
 if(isset($_GET['id']))
 {
+    $_SESSION['prevpage'] = "playlist.php?id=".$_GET['id'];
     echo "<div id='bodyContent' class='body-content'>";
     //Get the media's information from the database
     if($query = mysqli_prepare(db_connect_id(), "SELECT username, creation_date, name, description FROM playlist WHERE playlist_id=?"))
