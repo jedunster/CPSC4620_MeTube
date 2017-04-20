@@ -19,7 +19,25 @@ if(isset($_POST['submit'])) {
 				$login_error = "Incorrect username or password.";
 			}
 			else if($check==0){
-				$_SESSION['username']=$_POST['username']; //Set the $_SESSION['username']
+				if($query = mysqli_prepare(db_connect_id(), "SELECT username FROM media WHERE username=?"))
+    				{
+        				mysqli_stmt_bind_param($query, "s", $_POST['username']);
+        			if(mysqli_stmt_execute($query)){ //Query failed
+        			mysqli_stmt_bind_result($query, $fetchedUsername);
+        			$exists = mysqli_stmt_fetch($query);
+       				 mysqli_stmt_close($query);
+
+        			if($exists){
+            				$_SESSION['username'] = $fetchedUsername;
+				}
+				}
+    				}
+    				else
+    				{
+        				; //Could not connect
+    				}
+
+				
 				if(isset($_SESSION['prevpage']) && $_SESSION['prevpage'] != "")
 				{
 					$returnto = $_SESSION['prevpage'];
